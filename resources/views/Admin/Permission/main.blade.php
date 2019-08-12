@@ -13,7 +13,8 @@
                         <th>Tên hợp đồng</th>
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
-                        <th>Chi tiết</th>
+                        <th>Tình trạng</th>
+                        <th>Nghỉ phép</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -24,6 +25,13 @@
                     <td>{{$cont->name_contract}}</td>
                     <td>{{$cont->date_start}}</td>
                     <td>{{$cont->date_end}}</td>
+                    <td>
+                        <?php
+                        //Lấy thời gian theo format
+                            echo (strtotime($cont->date_end) - strtotime($now))/ (60 * 60 * 24) > 0 ?"<span class='badge badge-warning'>Còn hạn</span>":"<span class='badge badge-danger'>Hết hạn</span>" ;  
+                        ?>
+
+                    </td>
                     <td><button onclick="checkID(this)" id="{{$cont->id}}" class="btn btn-success btn-sm">Chi tiết</button></td>
                     </tr>
                         @endforeach

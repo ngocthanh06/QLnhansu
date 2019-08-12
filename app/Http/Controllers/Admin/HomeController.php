@@ -24,6 +24,11 @@ use Illuminate\Support\Facades\Hash;
 class HomeController extends Controller
 {
 
+    //Lấy thời gian
+    public function gettimenow()
+    {
+        return Carbon::now()->toDateString();
+    }
 
     public function gethome(){
         //Get quyền
@@ -219,7 +224,11 @@ class HomeController extends Controller
          //Sau đó truy vấn lấy chi tiết hợp đồng->(attendane)->1 ngày tương ứng với 1 phép nếu có.
          $data['num'] = 1;
          //Lấy id xong 
+         //Lấy thời gian hiện tại
+         $data['now'] = $this->gettimenow();
         // dd($data);
          return view('Admin/Permission/main',$data);
     }
+
+   
 }

@@ -925,6 +925,9 @@
               }) ;         
           });
 
+        //   
+                    
+        
               //Lấy hệ số lương, số ngày nghỉ
          
           //Lấy id check điểm danh        
@@ -933,12 +936,18 @@
            if($("#checkedAtt").is(":checked"))
            {
             $.get("{{asset('ajax/CreateAddAttend')}}"+"/"+id,function(data){
+                if(data == 1)
+                {
+                    $("#checkedAtt").prop('checked',false); 
+                    alert('Ngày chấm công đã tồn tại');   
+                }
+                else 
                 window.location.reload(false);
             });
            }
-         });
-         
+         }); 
       });
+
       
       function checkonclick(e){
         if($("input[type='checkbox']:checked")){
@@ -955,14 +964,27 @@
       }
 
       function checkID(e){
-          $.get("{{asset('ajax/ShowAttendContr')}}"+"/"+e,id,function(data){
-            
-          });
+        //   $.get("{{asset('ajax/ShowAttendContr')}}"+"/"+e.id,function(data){
+              
+        //     $('#showw').html(data);
+        //     });
+        $.get("{{asset('ajax/ShowAttendPermi')}}"+"/"+e.id,function(data){
+            $('#showw').html(data);
+        });
+      }
+
+      function showPer(e){
+        $.get("{{asset('ajax/ShowAttendContr')}}"+"/"+e.id,function(data){
+            $('#showw').html(data);
+        });
       }
 
   
        
-    
+    function submitok(){
+            var a =$("#lido").val();
+            console.log(a);
+    }
 
 // CK editor
         if(window.editor){

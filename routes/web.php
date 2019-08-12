@@ -68,6 +68,9 @@ Route::group(['namespace'=>'Admin'],function(){
         Route::get('getAttendance/{id}','Homecontroller@getAttendance');
         //Xin nghỉ phép
         Route::get('getPermission','HomeController@getPermission');
+
+        
+
     });
 });
 
@@ -87,6 +90,11 @@ Route::group(['namespace' =>'Ajax'],function(){
         Route::get('EditAddAttend/{id}','AjaxController@EditAddAttend');
         //ShowCOntractAttend
         Route::get('ShowAttendContr/{id}','AjaxController@ShowAttendContr');
+        //Post 
+        Route::get('postPer','AjaxController@postPer');
+
+        //Showw Perr
+        Route::get('ShowAttendPermi/{id}','AjaxController@ShowAttendPermi');
     });
 
 
