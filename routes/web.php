@@ -95,6 +95,8 @@ Route::group(['namespace' =>'Ajax'],function(){
 
         //Showw Perr
         Route::get('ShowAttendPermi/{id}','AjaxController@ShowAttendPermi');
+        //Cancel Per
+        Route::get('cancelPerr/{id}','AjaxController@cancelPerr');
     });
 
 

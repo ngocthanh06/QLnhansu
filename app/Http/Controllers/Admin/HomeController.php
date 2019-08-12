@@ -209,7 +209,7 @@ class HomeController extends Controller
          $data['count']= (strtotime($data['end']) - strtotime($data['start1']))/ (60 * 60 * 24) - $count;
          //lấy ngày hiện tại
          $data['now'] = (Carbon::now())->toDateString();
-
+         dd($data);
          return view('Admin/Attendance/main',$data);
     }
 

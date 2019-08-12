@@ -15,6 +15,10 @@ use App\Http\Requests\postAjaxPermiss;
 
 class ajaxController extends Controller
 {
+    //Tính khoảng cách của 2 ngày
+    public function cal2Day($date_start,$date_end){
+       return (strtotime($date_end) - strtotime($date_start))/ (60 * 60 * 24)+1;
+    }
     //Kiểm tra hạn sử dụng của hợp đồng
     public function checkHSDContract($id){
         //Tìm hợp đồng theo userid
@@ -32,7 +36,21 @@ class ajaxController extends Controller
         $contract->checkContract($id);
         return $contract->date_end;
     }
-    //
+    //Kiểm tra ngày bắt đầu đơn xin phép có bị trùng không
+    public function checkDateStart($id,$date_start){
+        //Tìm kiếm đơn xin phép theo theo id 
+        $permission = DB::table('permission')->where('id_contract',$id)->get();
+        $max = 0;
+        foreach($permission as $per)
+        {
+            //Lấy số này kết thúc lớn nhất
+            strtotime($per->date_end) > strtotime($max) ?  $max = $per->date_end : $max = $max;           
+        }
+        //Lấy giá trị ngày lớn hơn 0 là không được phép
+        $data = $this->cal2Day($max,$date_start);
+        return $data;
+    }
+    //Lấy liên hệ
     public function getcontract($id){
         //Lấy ngày bắt đầu, kết thúc, phép tối đa trong bảng contract
         $loai = contract::find($id);
@@ -65,6 +83,7 @@ class ajaxController extends Controller
             
        
     }
+    //Lấy hợp đồng
     public function gethopdong($idhopdong){
         //Lấy id của hợp đồng thông qua models contract
         $loai = contract::find($idhopdong);
@@ -160,7 +179,7 @@ class ajaxController extends Controller
         $contract = contract::find($id);
         $now = Carbon::now()->toDateString();
         //Lấy số ngày kết thúc của hợp đồng
-    echo "   <div class='ibox float-e-margins'>
+         echo "   <div class='ibox float-e-margins'>
                           <div class='ibox-title'>
                           <h4>ĐƠN XIN NGHỈ PHÉP</h4>
                        </div>
@@ -224,16 +243,12 @@ class ajaxController extends Controller
                 minYear: 1901,
                 maxYear: parseInt(moment().format('YYYY'),10)
                 }, function(start, end, label) {
-                
-                    
+          
                 });
             });
 
             $( '#myForm' ).submit(function( event ) {
-             
               });
-            
-
             </script>";
 
 
@@ -242,15 +257,12 @@ class ajaxController extends Controller
     public function postPer(postAjaxPermiss $request)
     {
 
-        $contract = contract::find($request->id_contract);
         //Ngày kết thúc hợp đồng
         $day_e = $this->getDayEndContract($request->id_contract);
         //Kiểm tra ngày bắt đầu có vượt qua ngày kết thúc không
         $day_st = (strtotime($day_e) - strtotime($request->date_start))/ (60 * 60 * 24);
         //kiểm tra ngày đi làm lại có trùng ngày kết thúc của hợp đồng không
         $dayend = (strtotime($day_e) - strtotime($request->date_end))/ (60 * 60 * 24);
-
-        // dd($dayend);
 
 
         $permi = new permission;
@@ -260,7 +272,12 @@ class ajaxController extends Controller
         $permi['num_date_end'] = (strtotime($request->date_end) - strtotime($request->date_start))/ (60 * 60 * 24)+1;
         $permi['id_contract'] = $request->id_contract;
         $permi['status'] = 0;
-      
+        
+        //Lấy tất cả ngày bắt đầu trong per để kiểm tra dữ liệu ngày bắt đầu nghỉ đã tồn tại chưa
+        $permission = $this->checkDateStart($request->id_contract,$permi['date_start']);
+        if($permission < 0)
+        return redirect()->intended('admin/getPermission')->with('error','Ngày nghỉ đã tồn tại');
+
         //Kiểm tra còn hạn sử dụng của hợp đồng không
         $chec = $this->checkHSDContract($request->id_contract);
         if($chec<0)
@@ -278,7 +295,6 @@ class ajaxController extends Controller
             else if($permi['num_date_end'] > 3)
         
                 return redirect()->intended('admin/getPermission')->with('error','Số ngày nghỉ không được quá 3 ngày');
-
             else{
                 $permi->save();
             return redirect()->intended('admin/getPermission')->with('success','Bạn đã nộp đơn thành công, Quản lý nhân sự sẽ kiểm tra và trả lời sớm cho bạn');
@@ -305,6 +321,7 @@ class ajaxController extends Controller
                        <th>Lí do</th>
                       <th>Số ngày nghỉ</th>
                        <th>Trạng thái</th>
+                       <th>Hủy đơn</th>
                    </tr>
                   </thead>
                     <tbody>";
@@ -318,6 +335,7 @@ class ajaxController extends Controller
                    <td>";
                   echo $co->status == 1? 'Được duyệt':'Chưa được duyệt';
                   echo "</td>";
+                  echo"<td><button onclick='cancel(this)' id='$co->id' class='btn btn-success'>Hủy</button></td>";
                    }
             echo" </table>
             <div style='text-align:right'>
@@ -327,7 +345,19 @@ class ajaxController extends Controller
             </div>
            </div>
          </div>
+         <script>
+                  function cancel(e){
+                    $.get('".asset('ajax/cancelPerr')."'+'/'+e.id,function(data){
+                        window.location.reload(false);
+                    });
+                }
+         </script>
          ";
-        
+    }
+
+    //hủy đơn
+    public function cancelPerr($id){
+        $can = permission::find($id);
+        $can->Delete();
     }
 }
