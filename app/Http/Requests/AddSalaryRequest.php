@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddContract extends FormRequest
+class AddSalaryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,17 +25,13 @@ class AddContract extends FormRequest
     {
         return [
             //
-            'num_max' => 'required',
-            'coefficients' => 'required',
         ];
     }
-    public function messages()
-    {
+    public function messages(){
         return [
             //
-            
-            'num_max.required' => 'Bạn phải chọn hình thức để setup ngày phép tối đa',
-            'coefficients.required' => 'Bạn phải chọn loại hợp đồng để setup hệ số lương'
+           
+
         ];
     }
 }

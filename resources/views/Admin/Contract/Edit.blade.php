@@ -44,21 +44,14 @@
 
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-              <label class="col-sm-2 control-label">Ngày bắt đầu - Ngày kết thúc</label>
+              <label class="col-sm-2 control-label">Ngày bắt đầu</label>
            <div class="col-sm-10" id="data_2"><div class="input-group date" >
            <?php 
                  $time_start = Carbon\Carbon::parse($contract->date_start)->toDateString();
-                 $time_end = Carbon\Carbon::parse($contract->date_end)->toDateString();
             ?>
-           <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" required name="date_now" class="form-control" value="{{Carbon\Carbon::parse($time_start)->format('m/d/Y')}} - {{Carbon\Carbon::parse($time_end)->format('m/d/Y')}}">
+           <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" required name="date_now" class="form-control" value="{{Carbon\Carbon::parse($time_start)->format('m/d/Y')}}">
             </div></div>
-           </div>
-           {{-- date start and date end --}}
-           <div class="col-sm-10" id="data_2"><div class="input-group date" >
-                    <input type="hidden" required name="date_end" class="form-control" value="{{$contract->date_end}}">
-                    <input type="hidden" required name="date_start" class="form-control" value="{{$contract->date_start}}">
-               </div></div>
-              
+           </div>              
 
            <div class="hr-line-dashed"></div>
            <div class="form-group">
@@ -67,9 +60,15 @@
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-              <label class="col-sm-2 control-label">Hệ số lương</label>
-           <div class="col-sm-10"><input type="text" min="2" max="3" id="coefficients" " readonly name="coefficients" class="form-control"  value="{{$contract->coefficients}}"></div>
-           </div>
+               <label class="col-sm-2 control-label">Ca làm</label>
+            <div class="col-sm-10">
+               <select  id="coefficients" name="coefficients" class="form-control">
+                  <option {{$contract->coefficients == 1 ? 'selected':''}} value="1">Ca sáng</option>
+                  <option {{$contract->coefficients == 2 ? 'selected':''}} value="2">Ca chiều</option>
+                  <option {{$contract->coefficients == 3 ? 'selected':''}} value="3">Cả ngày</option>
+               </select>
+            </div>
+            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
               <label class="col-sm-2 control-label">Nội dung</label>

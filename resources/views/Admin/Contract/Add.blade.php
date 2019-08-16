@@ -44,18 +44,12 @@
 
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-              <label class="col-sm-2 control-label">Ngày bắt đầu - Ngày kết thúc</label>
-           <div class="col-sm-10" "><div class="input-group date" >
+              <label class="col-sm-2 control-label">Ngày bắt đầu</label>
+           <div class="col-sm-10" ><div class="input-group date" >
            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" id="data_2" required name="date_now" class="form-control" value="{{old('date_start')}}">
             </div></div>
            </div>
            {{-- date start and date end --}}
-           <div class="col-sm-10" id=""><div class="input-group date" >
-                    <input type="hidden" required id="end1" name="date_end" class="form-control" value="{{old('date_end')}}">
-                    <input type="hidden" required id="start1" name="date_start" class="form-control" value="{{old('date_start')}}">
-               </div></div>
-              
-
            <div class="hr-line-dashed"></div>
            <div class="form-group">
               <label class="col-sm-2 control-label">Số ngày phép tối đa</label>
@@ -63,8 +57,14 @@
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-              <label class="col-sm-2 control-label">Hệ số lương</label>
-           <div class="col-sm-10"><input type="text" min="2" max="3" id="coefficients" " readonly name="coefficients" class="form-control"  value="3"></div>
+              <label class="col-sm-2 control-label">Ca làm</label>
+           <div class="col-sm-10">
+              <select  id="coefficients" name="coefficients" class="form-control">
+                 <option value="1">Ca sáng</option>
+                 <option value="2">Ca chiều</option>
+                 <option value="3">Cả ngày</option>
+              </select>
+           </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
@@ -78,7 +78,7 @@
      <div class="form-group" style="text-align:right">
      <div class="col-sm-9 col-sm-offset-2">
      <a class="btn btn-white" href="{{asset('admin/user')}}">Hủy</a>
-     <button class="btn btn-primary" type="submit">Thêm mới</button>
+     <button class="btn btn-primary" id="sub" type="submit">Thêm mới</button>
      </div>
      </div>
      </form>

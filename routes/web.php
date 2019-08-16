@@ -62,6 +62,7 @@ Route::group(['namespace'=>'Admin'],function(){
         Route::post('EditContract/{id}','HomeController@postEditContract');
         //Delete hợp đồng
         Route::get('DeleteContract/{id}','HomeController@DeleteContract');
+        Route::post('DeleteContract/{id}','HomeController@PostDeleteContract');
 
         //Chấm công
         //
@@ -69,7 +70,13 @@ Route::group(['namespace'=>'Admin'],function(){
         //Xin nghỉ phép
         Route::get('getPermission','HomeController@getPermission');
 
-        
+        //Lương
+        //Get lương
+        Route::get('salary/{id}','HomeController@getSalary');
+        //Post Lương
+        Route::post('salary/{id}','HomeController@postSalary');
+
+       
 
     });
 });
@@ -85,7 +92,7 @@ Route::group(['namespace' =>'Ajax'],function(){
         //AddDateNew
         Route::get('getaddDatecontract/{id}', 'AjaxController@getaddDatecontract');
         //AddAttend
-        Route::get('CreateAddAttend/{id}','AjaxController@CreateAddAttend');
+        Route::get('CreateAddAttend/{id}/{day}','AjaxController@CreateAddAttend');
         //EditAttend
         Route::get('EditAddAttend/{id}','AjaxController@EditAddAttend');
         //ShowCOntractAttend
@@ -97,6 +104,9 @@ Route::group(['namespace' =>'Ajax'],function(){
         Route::get('ShowAttendPermi/{id}','AjaxController@ShowAttendPermi');
         //Cancel Per
         Route::get('cancelPerr/{id}','AjaxController@cancelPerr');
+        //Lấy đơn xin phép 
+        Route::get('checkPermiss/{id}','AjaxController@checkPermiss');
+        Route::get('getPerMonth','AjaxController@getPerMonth');
     });
 
 

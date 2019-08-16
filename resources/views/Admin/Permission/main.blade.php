@@ -27,6 +27,9 @@
                     <td>{{$cont->date_end}}</td>
                     <td>
                         <?php
+                        if($cont->date_end==null)
+                        echo "<span class='badge badge-warning'>Còn hạn</span>";
+                        else
                         //Lấy thời gian theo format
                             echo (strtotime($cont->date_end) - strtotime($now))/ (60 * 60 * 24) > 0 ?"<span class='badge badge-warning'>Còn hạn</span>":"<span class='badge badge-danger'>Hết hạn</span>" ;  
                         ?>

@@ -32,6 +32,10 @@ class contract extends Model
         return $this->hasMany('App\Models\attendance','id_contract','id');
     }
     //Ajax controller
+    //Lấy số ngày công với status = 1 và phép =1 
+    public function getStatus(){
+        return $this->hasMany('App\Models\attendance','id_contract','id')->where('status','1')->where('permission','1');
+    }
     //Lấy số ngày công với status =1 và phép =0
     public function getWorked(){
         return $this->hasMany('App\Models\attendance','id_contract','id')->where('status','1')->where('permission','0');
@@ -51,14 +55,20 @@ class contract extends Model
     //Kiểm tra thông tin hợp đồng còn thời hạn không
     public function checkContract($id){
         $check = DB::table('contract')->join('account','account.id','contract.id_account')->where('account.id',$id)->get();
+        // dd($check);
         $now = Carbon::parse(Carbon::now())->format('Y-m-d');
         $day = '';
         $max = 0;
         foreach($check as $che)
         {
+            //Kiểm tra ngày kết thúc có null không
+            if($che->date_end == null)
+            return 1;
+            else{
         //kiểm tra số để lấy số ngày lớn nhất 
            $value = (strtotime($che->date_end) - strtotime($now))/ (60 * 60 * 24);
            $value > $max ? $day = $che->date_end and $max = $value : $day;  
+            }
         }
 
         return $day;

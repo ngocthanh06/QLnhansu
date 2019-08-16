@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Ajax;
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -19,6 +17,10 @@ class ajaxController extends Controller
     public function cal2Day($date_start,$date_end){
        return (strtotime($date_end) - strtotime($date_start))/ (60 * 60 * 24)+1;
     }
+    //Kiểm tranh danh sách phép có trong hợp đồng
+    public function checkPerr($id){
+        return DB::table('permission')->where('id_contract',$id)->get();
+    }
     //Kiểm tra hạn sử dụng của hợp đồng
     public function checkHSDContract($id){
         //Tìm hợp đồng theo userid
@@ -27,7 +29,10 @@ class ajaxController extends Controller
         //Láy thời gian hiện tại
         $now = Carbon::now()->toDateString();
         //Kiểm tra thời hạn 
+        if($contract->date_end != null)
         $day = (strtotime($contract->date_end) - strtotime($now))/(60 * 60 * 24);
+        else
+        $day = 1;
         return $day;
     }
     //Lấy ngày kết thúc của hợp đồng
@@ -36,19 +41,30 @@ class ajaxController extends Controller
         $contract->checkContract($id);
         return $contract->date_end;
     }
+    //Lấy ngày bắt đầu hợp đồng
+    public function getDaystart($id){
+        $contract = contract::find($id);
+        $contract->checkContract($id);
+        return $contract->date_start;
+    }
     //Kiểm tra ngày bắt đầu đơn xin phép có bị trùng không
-    public function checkDateStart($id,$date_start){
+    public function checkDateStart($id,$date_start,$date_end){
         //Tìm kiếm đơn xin phép theo theo id 
-        $permission = DB::table('permission')->where('id_contract',$id)->get();
-        $max = 0;
+        $permission = DB::table('permission')->where('id_contract',$id)->where('status',0)->get();
+        //Lấy được ngày nhỏ nhất trong danh sách đơn xin phép
+        // dd($permission);
         foreach($permission as $per)
         {
-            //Lấy số này kết thúc lớn nhất
-            strtotime($per->date_end) > strtotime($max) ?  $max = $per->date_end : $max = $max;           
+           $end = Carbon::Parse($per->date_end);
+           $start = Carbon::Parse($per->date_start);
+           //Ngày bắt đầu
+           $day_start = Carbon::Parse($date_start)->between($start,$end);
+           //Ngày kết thúc
+           $day_end = Carbon::Parse($date_end)->between($start,$end);
+           if($day_start==true || $day_end == true)
+           return 0;        
         }
-        //Lấy giá trị ngày lớn hơn 0 là không được phép
-        $data = $this->cal2Day($max,$date_start);
-        return $data;
+        return 1;
     }
     //Lấy liên hệ
     public function getcontract($id){
@@ -118,60 +134,62 @@ class ajaxController extends Controller
         $data = contract::find($id);
         //Lấy ngày làm việc kết thúc sớm nhất của hợp đồng
         $getcontract = $data->checkContract($id);
-        if($getcontract == ""){
-            $getcontract = Carbon::now();
-        }
-        //Format ngày đầu
-        $get = Carbon::parse($getcontract)->format('Y-m-d');
-        
-        //Cộng thêm cho 2 ngày
-        $set2 = Carbon::parse($get)->addDays(2);
-        //Format ngày 2
-        $set = $set2->format('Y-m-d');
-        echo $get. " - ". $set;
+        //Kiểm tra số ngày kết thúc hợp đồng có còn không
+        //Bằng $getcontract=1 nghĩa là ngày kết thúc null->hợp đồng chưa kết thúc 
+        if($getcontract != "" || $getcontract==1)
+            echo 1;
+        else
+            echo Carbon::now()->toDateString();
+       
     }
     //Post AddAttend
-    public function CreateAddAttend($id){
-        $atten = new attendance;
-        $check = DB::table('attendance')->where('id_contract',$id)->get();
+    public function CreateAddAttend($id,$day){
+          
+        $contract = contract::find($id);
+        //Thời gian hiện tại
         $now =Carbon::now()->toDateString();
-        // dd($now);
-        // dd($check);
-        
-        $num = 0;
-        foreach($check as $ch)
+        //So sánh thời gian hiện tại và thời gian dự kiến
+        $checked = $this->cal2Day($day,$now);
+
+        //kiểm tra
+        //Chuyển đổi định dạng
+         $day1 = Carbon::parse($day);
+        //Duyệt mảng để thêm thời gian đúng với csdl hiện tại
+        //Nếu checked lớn hơn 0 nghĩa là thời gian chấm công so với hiện tại bị thiếu
+        if($checked>0 )
         {
-            //kiểm tra ngày làm có bị trùng với ngày làm hiện tại không
-            if($ch->day == $now)
-            {
-                $num = ++$num;
-                break;
-            }
+           
+            for($i=0; $i<$checked; $i++)
+             {
+                 //Chạy cho đến ngày kết thúc của hợp đồng
+                $ch =$this->cal2Day($day1,$contract->date_end);
+                if($ch > 0)
+                {
+                    $atten = new attendance;
+                    $atten['day'] = $day1; 
+                    $atten['status'] = 1;
+                    $atten['permission'] = 0;
+                    $atten['id_contract'] = $id;
+                    $atten->save();
+                }
+                $day1->addDay();
+
+            } 
         }
-        if($num==0)
-        {   
-            $atten['day'] = $now; 
-            $atten['status'] = 1;
-            $atten['permission'] = 0;
-            $atten['id_contract'] = $id;
-            $atten->save();
-            return $num;
-        }
-        else
-         return $num;
-        //  dd($num);
-        // $atten->save();
-        // return redirect()->intended('admin/getAttendance/'.$id)->with('success','Chấm công thành công');
-        // echo "<td>".$atten['day']."</td>";
-       
+        else 
+        return 1;       
     }
     public function EditAddAttend($id){
         $atten = attendance::find($id);
-        if($atten['status'] == 0)
-        $atten['status'] = 1;
-        else 
-        $atten['status'] = 0;
-        $atten->update();
+        //Phép và công đã được duyệt thì không được thay đổi
+        if($atten['status'] == 0 && $atten['permission'] == 1 ||$atten['status'] == 0 && $atten['permission'] == 0 || $atten['status'] == 1 && $atten['permission'] ==0 )
+        {
+            if($atten['status'] == 0)
+            $atten['status'] = 1;
+            else 
+            $atten['status'] = 0;
+            $atten->update();     
+        }    
     }
     //Show Contract and attend
     public function ShowAttendContr($id){
@@ -256,14 +274,26 @@ class ajaxController extends Controller
     //Post Đơn xin phép
     public function postPer(postAjaxPermiss $request)
     {
-
+        //Ngày bắt đầu hợp đồng
+        $day_s = $this->getDaystart($request->id_contract);
         //Ngày kết thúc hợp đồng
         $day_e = $this->getDayEndContract($request->id_contract);
-        //Kiểm tra ngày bắt đầu có vượt qua ngày kết thúc không
-        $day_st = (strtotime($day_e) - strtotime($request->date_start))/ (60 * 60 * 24);
+        //
         //kiểm tra ngày đi làm lại có trùng ngày kết thúc của hợp đồng không
         $dayend = (strtotime($day_e) - strtotime($request->date_end))/ (60 * 60 * 24);
+        //Kiểm tra ngày bắt đầu nghỉ có nhỏ hơn ngày bắt đầu hợp đồng không
+        $day_ck = (strtotime($day_s) - strtotime($request->date_start))/ (60 * 60 * 24);
+        //Nếu day_e ==null nghĩa là hợp đồng còn hiệu lực chưa có ngày kết thúc
+        if($day_e==null)
+        {
+            $day_st = 1;
+            $dayend = 1;
 
+        }
+        else
+        //Kiểm tra ngày bắt đầu có vượt qua ngày kết thúc không
+        $day_st = (strtotime($day_e) - strtotime($request->date_start))/ (60 * 60 * 24);
+        
 
         $permi = new permission;
         $permi['date_start'] = date("Y-m-d",strtotime($request->date_start));
@@ -274,8 +304,9 @@ class ajaxController extends Controller
         $permi['status'] = 0;
         
         //Lấy tất cả ngày bắt đầu trong per để kiểm tra dữ liệu ngày bắt đầu nghỉ đã tồn tại chưa
-        $permission = $this->checkDateStart($request->id_contract,$permi['date_start']);
-        if($permission < 0)
+        $permission = $this->checkDateStart($request->id_contract,$permi['date_start'],$permi['date_end']);
+        // dd($permission);
+        if($permission <= 0)
         return redirect()->intended('admin/getPermission')->with('error','Ngày nghỉ đã tồn tại');
 
         //Kiểm tra còn hạn sử dụng của hợp đồng không
@@ -284,10 +315,13 @@ class ajaxController extends Controller
         return redirect()->intended('admin/getPermission')->with('error','Hợp đồng đã hết hạn');
         // dd($permi);
         else {
-            //Ngày bắt đầu
+            //
+            if($day_ck>0)
+            return redirect()->intended('admin/getPermission')->with('error','Ngày bắt đầu thấp hơn mức phạm vi hợp đồng');
+            //Ngày bắt đầu nghỉ
             if($day_st<0)
             return redirect()->intended('admin/getPermission')->with('error','Ngày bắt đầu đã vượt quá mức phạm vi hợp đồng');
-            //Ngày kết thúc
+            //Ngày kết thúc nghỉ
             else if($dayend<0)
             return redirect()->intended('admin/getPermission')->with('error','Ngày kết thúc đã vượt quá phạm vi hợp đồng');
 
@@ -302,13 +336,14 @@ class ajaxController extends Controller
         }
         // echo ;
     }
-
     //Lấy danh sách đơn xin phép
     public function ShowAttendPermi($id){
         //Kiểm tra hợp đồng còn hạ sử dụng không
         $acc = $this->checkHSDContract($id);
         //lấy danh sách đơn xin phép
         $permi = DB::table('permission')->where('id_contract',$id)->get();
+        //Đếm số lượng đơn xin phép được chấp thuận
+        $count = count(DB::table('permission')->where('id_contract',$id)->where('status','1')->get());
         $num = 1;
        echo " <div class='ibox float-e-margins'>
           <div class='ibox-content'>
@@ -335,12 +370,15 @@ class ajaxController extends Controller
                    <td>";
                   echo $co->status == 1? 'Được duyệt':'Chưa được duyệt';
                   echo "</td>";
-                  echo"<td><button onclick='cancel(this)' id='$co->id' class='btn btn-success'>Hủy</button></td>";
+                  echo"<td><button onclick='cancel(this)'"; 
+                  echo $co->status == 1? 'disabled':''; 
+                  echo "  id='$co->id' class='btn btn-success'>Hủy</button></td>";
                    }
             echo" </table>
             <div style='text-align:right'>
                    <button onclick='showPer(this)'";
-                   echo  $acc > 0 ? '':'disabled';   
+                 if($acc > 0 && $count < 20) echo "";
+                    else echo "disabled";   
                    echo" id='".$id."' class='btn btn-success'>Đơn xin phép</button>
             </div>
            </div>
@@ -354,10 +392,43 @@ class ajaxController extends Controller
          </script>
          ";
     }
-
     //hủy đơn
     public function cancelPerr($id){
         $can = permission::find($id);
         $can->Delete();
+    }
+    //Lấy đơn xin phép
+    public function checkPermiss($id){
+        $permi = permission::find($id);
+        if($permi['status'] == 1)
+        $permi['status'] = 0;
+        else
+        $permi['status']=1;
+        $permi->update();
+        $att = DB::table('attendance')->where('id_contract',$permi->id_contract)->get();
+        //Lấy ngày bắt đầu và kết thúc của đơn xin phép
+        $start = Carbon::parse($permi['date_start']);
+        // dd($att);
+        $end = Carbon::parse($permi['date_end']);
+        //So sánh với lại ngày công có trong hợp đồng
+        
+        foreach($att as $at)
+        {
+            $day = Carbon::parse($at->day)->between($start,$end);
+            if($day == true){
+            if($permi['status'] == 0)
+            DB::table('attendance')->where('id',$at->id)->update(['permission'=>'0','status'=>'0']);
+            else 
+            DB::table('attendance')->where('id',$at->id)->update(['permission'=>'1','status'=>'1']);
+            }
+        }
+        return $permi['status'];
+        
+        
+    }
+
+    //Thống kê công theo tháng
+    public function getPerMonth(){
+         
     }
 }
