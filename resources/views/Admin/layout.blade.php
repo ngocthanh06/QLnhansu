@@ -70,8 +70,12 @@
                     </li>
                     <li class="<?php echo isset($open) && $open == 'contract' ?'active':'' ?>">
                     <a  href="{{asset('admin/contract')}}"><i class="fa fa-envelope"></i> <span class="nav-label">Hợp đồng </span></a>
-                     @else  
+                     
                     </li>
+                    <li>    
+                    <a class="<?php echo isset($open) && $open == 'GetAttendance' ?'active':'' ?>" href="{{asset('admin/GetAtendance')}}"><i class="fa fa-flask"></i> <span class="nav-label">Bảng công</span></a>
+                    </li>
+                    @else 
                     <li class="<?php echo isset($open) && $open == 'permission' ?'active':'' ?>">
                     <a href="{{asset('admin/getPermission')}}"><i class="fa fa-pie-chart"></i> <span class="nav-label">Xin nghỉ phép</span>  </a>
                     </li>

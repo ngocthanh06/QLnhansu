@@ -8,34 +8,45 @@
    <form method="post" class="form-horizontal">
        {{ csrf_field() }}
       <div class="form-group">
+         
          <label class="col-sm-2 control-label">Họ và tên</label>
-      <div class="col-sm-10"><input type="text" required value="{{old('name')}}" name="name" placeholder="Nhập họ và tên" class="form-control"></div>
+      <div class="col-sm-10">
+            {{ Form::text('name', old('name'), array('required','placeholder'=>'Nhập họ và tên','class'=>'form-control')) }}
+      </div>
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Username</label>
-      <div class="col-sm-10"><input type="text" required value="{{old('username')}}" name="username" placeholder="Nhập username" class="form-control"> </div>
+      <div class="col-sm-10">
+         {{Form::text('username',old('username'),array('required','placeholder'=>'Nhập username', 'class'=>'form-control'))}}
+      </div>
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Password</label>
-      <div class="col-sm-10"><input type="password" required value="{{old('password')}}" placeholder="Nhập password" class="form-control" name="password"></div>
+      <div class="col-sm-10">
+         {!! Form::password('password', array('required','placeholder'=>'Nhập password','class'=>'form-control')) !!}
+      </div>
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Chứng minh nhân dân</label>
-      <div class="col-sm-10"><input type="text" re name="passport" class="form-control" placeholder="Nhập chứng minh nhân dân" value="{{old('passport')}}"></div>
+      <div class="col-sm-10">
+         {!! Form::text('passport', old('passport'), array('class'=>'form-control', 'placeholder'=>'Nhập chứng minh nhân dân')) !!}
+      </div>
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Địa chỉ</label>
-      <div class="col-sm-10"><input type="text" value="{{old('address')}}" name="address" placeholder="Nhập địa chỉ của bạn" class="form-control"></div>
+      <div class="col-sm-10">
+         {!! Form::text('address', old('address'), array('placeholder'=>'Nhập địa chỉ của bạn', 'class'=>'form-control')) !!}
+      </div>
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Thông tin thêm</label>
          <div class="col-sm-10">
-         <textarea name="info" id="editor" cols="30" rows="10" placeholder="Nhập nội dung thông tin thêm">{{old('info')}}</textarea>
+         {!! Form::textarea('info',old('info'), array('id'=>'editor', 'cols'=>'30', 'rows'=>'10', 'placeholder'=>'Nhập nội dung thông tin thêm')) !!}
          </div>
       </div>
       <div class="hr-line-dashed"></div>
@@ -45,14 +56,16 @@
             <div class="i-checks">
                <label class="">
                   <div class="iradio_square-green" style="position: relative;">
-                  <input type="radio" checked value="1" name="sex" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                  {!! Form::radio('sex', 1, 'checked', array('style'=>'position: absolute; opacity: 0;')) !!}
+                  <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
                   <i></i> Nam 
                </label>
             </div>
             <div class="i-checks">
                <label class="">
                   <div class="iradio_square-green " style="position: relative;">
-                    <input type="radio"  value="2" name="sex" {{old('sex') == 2 ? 'checked':''}} style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                  {!! Form::radio('sex', 2, old('sex') == 2 ? 'checked':'', array('style'=>'position: absolute; opacity: 0;')) !!}
+                  <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
                   <i></i> Nữ 
                </label>
             </div>
@@ -72,7 +85,7 @@
 <div class="form-group" style="text-align:right">
 <div class="col-sm-9 col-sm-offset-2">
 <a class="btn btn-white" href="{{asset('admin/user')}}">Hủy</a>
-<button class="btn btn-primary" type="submit">Thêm mới</button>
+{!! Form::submit('Thêm mới', array('class'=>'btn btn-primary')) !!}
 </div>
 </div>
 </form>

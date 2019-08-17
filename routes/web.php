@@ -31,50 +31,53 @@ Route::group(['namespace'=>'Admin'],function(){
         Route::get('home','HomeController@gethome');
         Route::post('home','HomeController@posthome');
         //Danh sách nhân viên
-        Route::get('user','HomeController@getUser');
+        Route::get('user','UserManager@getUser');
         //Get add nhân viên
-        Route::get('addUser','HomeController@getAddUser');
+        Route::get('addUser','UserManager@getAddUser');
         //Post add Nhân viên
-        Route::post('addUser','HomeController@postAddUser');
+        Route::post('addUser','UserManager@postAddUser');
         //get edit nhân viên
-        Route::get('editUser/{id}','HomeController@getEditUser');
+        Route::get('editUser/{id}','UserManager@getEditUser');
         //Post Edit Nhân viên
-        Route::post('editUser/{id}','HomeController@postEditUser');
+        Route::post('editUser/{id}','UserManager@postEditUser');
         //Delete Nhân viên
-        Route::get('deleteUser/{id}','HomeController@getDeleteUser');
+        Route::get('deleteUser/{id}','UserManager@getDeleteUser');
 
         //
         //Loại hợp đồng
-        Route::get('type_contract','HomeController@getTypeContract');
+        Route::get('type_contract','TypeContractManager@getTypeContract');
         
         
 
         //Hợp đồng
         //Lấy danh sách loại hợp đồng
-        Route::get('contract','HomeController@getContract');
+        Route::get('contract','ContractManager@getContract');
         //get THêm hợp đồng
-        Route::get('AddContract','HomeController@getAddContract');
+        Route::get('AddContract','ContractManager@getAddContract');
         //Post Thêm hợp đồng
-        Route::post('AddContract','HomeController@postAddContract');
+        Route::post('AddContract','ContractManager@postAddContract');
         //Get edit hợp đồng
-        Route::get('EditContract/{id}','HomeController@getEditContract');
+        Route::get('EditContract/{id}','ContractManager@getEditContract');
         //Post edit hợp đồng
-        Route::post('EditContract/{id}','HomeController@postEditContract');
+        Route::post('EditContract/{id}','ContractManager@postEditContract');
         //Delete hợp đồng
-        Route::get('DeleteContract/{id}','HomeController@DeleteContract');
-        Route::post('DeleteContract/{id}','HomeController@PostDeleteContract');
+        Route::get('DeleteContract/{id}','ContractManager@DeleteContract');
+        Route::post('DeleteContract/{id}','ContractManager@PostDeleteContract');
 
         //Chấm công
         //
-        Route::get('getAttendance/{id}','Homecontroller@getAttendance');
+        Route::get('getAttendance/{id}','AttendanceManager@getAttendance');
         //Xin nghỉ phép
-        Route::get('getPermission','HomeController@getPermission');
+        Route::get('getPermission','PermissionManager@getPermission');
 
         //Lương
         //Get lương
-        Route::get('salary/{id}','HomeController@getSalary');
+        Route::get('salary/{id}','SalaryManager@getSalary');
         //Post Lương
-        Route::post('salary/{id}','HomeController@postSalary');
+        Route::post('salary/{id}','SalaryManager@postSalary');
+
+        //Bảng công
+        Route::get('GetAtendance','AttendanceManager@GetAtendance');
 
        
 
@@ -106,8 +109,17 @@ Route::group(['namespace' =>'Ajax'],function(){
         Route::get('cancelPerr/{id}','AjaxController@cancelPerr');
         //Lấy đơn xin phép 
         Route::get('checkPermiss/{id}','AjaxController@checkPermiss');
+
+       
+
+
+        
+        //THống kê tháng chưa làm
         Route::get('getPerMonth','AjaxController@getPerMonth');
     });
 
 
 });
+
+
+Route::get('/home', 'HomeController@index')->name('home');

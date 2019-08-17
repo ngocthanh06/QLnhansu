@@ -9,27 +9,32 @@
             {{ csrf_field() }}
            <div class="form-group">
               <label class="col-sm-2 control-label">Họ và tên</label>
-           <div class="col-sm-10"><input type="text" required value="{{$user->name}}" name="name" placeholder="Nhập họ và tên" class="form-control"></div>
+           <div class="col-sm-10">
+              <input type="text" required value="{{$user->name}}" name="name" placeholder="Nhập họ và tên" class="form-control"></div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
               <label class="col-sm-2 control-label">Username</label>
-           <div class="col-sm-10"><input type="text" required value="{{$user->username}}" name="username" placeholder="Nhập username" class="form-control"> </div>
+           <div class="col-sm-10">
+              <input type="text" required value="{{$user->username}}" name="username" placeholder="Nhập username" class="form-control"> </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
               <label class="col-sm-2 control-label">Password</label>
-           <div class="col-sm-10"><input type="password" required value="{{$user->password}}" placeholder="Nhập password" class="form-control" name="password"></div>
+           <div class="col-sm-10">
+              <input type="password" required value="{{$user->password}}" placeholder="Nhập password" class="form-control" name="password"></div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
               <label class="col-sm-2 control-label">Chứng minh nhân dân</label>
-           <div class="col-sm-10"><input type="text" re name="passport" class="form-control" placeholder="Nhập chứng minh nhân dân" value="{{$user->passport}}"></div>
+           <div class="col-sm-10">
+              <input type="text" re name="passport" class="form-control" placeholder="Nhập chứng minh nhân dân" value="{{$user->passport}}"></div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
               <label class="col-sm-2 control-label">Địa chỉ</label>
-           <div class="col-sm-10"><input type="text" value="{{$user->address}}" name="address" placeholder="Nhập địa chỉ của bạn" class="form-control"></div>
+           <div class="col-sm-10">
+              <input type="text" value="{{$user->address}}" name="address" placeholder="Nhập địa chỉ của bạn" class="form-control"></div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
