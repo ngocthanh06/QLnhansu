@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class account extends Model
 {
@@ -16,8 +17,7 @@ class account extends Model
         return $this->hasOne('App\Models\role','id','id_role');
     }
 
-  
-    
+   
 
 
 }

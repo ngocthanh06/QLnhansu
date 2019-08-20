@@ -12,6 +12,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 
+    {{-- DataTable --}}
+    <link rel="stylesheet" type="text/css" href="{{asset('qlns/DataTables/datatables.min.css')}}"/>
     {{-- Lịch --}}
     <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
 
@@ -73,7 +75,7 @@
                      
                     </li>
                     <li>    
-                    <a class="<?php echo isset($open) && $open == 'GetAttendance' ?'active':'' ?>" href="{{asset('admin/GetAtendance')}}"><i class="fa fa-flask"></i> <span class="nav-label">Bảng công</span></a>
+                    <a class="<?php echo isset($open) && $open == 'GetAttendance' ?'active':'' ?>" href="{{asset('admin/GetAtendance')}}"><i class="fa fa-flask"></i> <span class="nav-label">Bảng lương</span></a>
                     </li>
                     @else 
                     <li class="<?php echo isset($open) && $open == 'permission' ?'active':'' ?>">
@@ -757,7 +759,9 @@
     {{-- Lịch --}}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    
+    {{-- DataTable --}}
+    <script type="text/javascript" src="{{asset('qlns/DataTables/datatables.min.js')}}"></script>
+
  <script >
 
     $(document).ready(function() {
@@ -877,6 +881,17 @@
 
     //Lấy hợp đồng
     $(document).ready(function() {
+        //Select lương theo tháng
+        
+        $('#month').on('change',function(){
+            var id = $(this).val();
+            $.get("{{asset('ajax/getMonthSalary')}}" + '/' +id,function(data){
+                $('#showMonth').html(data);
+
+            });
+        });
+
+
         //alert('Đã chạy được');//Kiểm tra script chạy được chưa
         $("#contract").on('click', function() {
             var idSemester = $(this).val(); //Gọi thể loại để thực hiện thay đổi
@@ -895,6 +910,10 @@
             });
         });
         
+        //DataTable
+        $('#table_id').DataTable();
+
+
         //Thống kê danh sách chấm công theo tháng
         $('#option3').on('click',function(){
             $.get("{{asset('ajax/getPerMonth')}}", function(data) {
@@ -1012,7 +1031,7 @@
     
     function checkedAtt(e) {
         $.get("{{asset('ajax/CreateAddAttend')}}" + "/" + e.value + "/" + e.id, function(data) {
-            if (data == 1) {
+            if (data >= 1) {
                 $("input[name='check']:checked").prop('checked', false);
                 alert('Chưa đến hạn chấm công');
             } else

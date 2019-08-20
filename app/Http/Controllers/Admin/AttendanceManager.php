@@ -10,6 +10,10 @@ use App\Models\contract;
 use App;
 use DB;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\Exportable;
+
+
 
 
 class AttendanceManager extends Controller
@@ -38,7 +42,7 @@ class AttendanceManager extends Controller
         $data['role'] = $this->getrole();
         $info = contract::find($id);
         //Thông tin attendance có bao nhiêu
-        $data['contract'] = $info->checkAttend;
+        $data['contract'] = $info->checkAttend()->paginate(10);
         //Số ngày đã làm
         $data['work'] =count($this->getAtt($id));
         //Cập nhật thông tin của ngày công trong bảng lương
@@ -65,16 +69,22 @@ class AttendanceManager extends Controller
        $data['permi'] = count(DB::table('permission')->where('id_contract',$id)->get());
        //Đếm số lượng đơn xin phép được chấp thuận
        $data['countPer'] = count(DB::table('permission')->where('id_contract',$id)->where('status','1')->get());
-       //  dd($data);
+        // dd($data);
         return view('Admin/Attendance/main',$data);
    }
 
-   //Bảng công
+   //Bảng lương
    public function GetAtendance()
    {
        //Get quyền
        $role = $this->getrole();
-       $a = 11;
-       return view('Admin/Attendance/GetAttendance',compact('role','a'));
+       //Lấy danh sách nhân viên join hợp đồng, lương
+       $list = DB::table('account')->join('contract','contract.id_account','account.id')->join('salary','salary.id_attent','contract.id')->join('role','role.id','account.id_role')->get();     
+    //    dd($list);
+       $num =1;
+       return view('Admin/Attendance/GetAttendance',compact('role','list','num'));
    }
+
+   
+
 }

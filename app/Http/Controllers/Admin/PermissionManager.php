@@ -26,6 +26,7 @@ class PermissionManager extends Controller
     //
     //Lấy đơn xin nghỉ phép
     public function getPermission(){
+        
         //Get quyền ->id của role
         $data['role'] = $this->getrole();
         //Lấy id của tài khoản nhân viên để truy vấn dữ liệu của hợp đồng hiện có-> (contract) join thên loại hợ đồng

@@ -12,4 +12,5 @@ class role extends Model
     protected $guarded = [];
 
     
+    
 }

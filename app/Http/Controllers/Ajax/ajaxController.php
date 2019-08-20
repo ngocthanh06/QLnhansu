@@ -13,6 +13,11 @@ use App\Http\Requests\postAjaxPermiss;
 
 class ajaxController extends Controller
 {
+    //Lấy thời gian hiện tại
+    protected function gettimenow()
+    {
+        return Carbon::now()->toDateString();
+    }
     //Tính khoảng cách của 2 ngày
     public function cal2Day($date_start,$date_end){
        return (strtotime($date_end) - strtotime($date_start))/ (60 * 60 * 24)+1;
@@ -146,23 +151,35 @@ class ajaxController extends Controller
     public function CreateAddAttend($id,$day){
           
         $contract = contract::find($id);
+        // dd($contract);
+        //Lấy thời gian kết thúc
+        $end = $contract->date_end;
         //Thời gian hiện tại
         $now =Carbon::now()->toDateString();
         //So sánh thời gian hiện tại và thời gian dự kiến
         $checked = $this->cal2Day($day,$now);
 
+        
         //kiểm tra
         //Chuyển đổi định dạng
          $day1 = Carbon::parse($day);
         //Duyệt mảng để thêm thời gian đúng với csdl hiện tại
         //Nếu checked lớn hơn 0 nghĩa là thời gian chấm công so với hiện tại bị thiếu
+        // dd($checked);
+        $re = 1;
         if($checked>0 )
         {
-           
+        //    if($end == null)
             for($i=0; $i<$checked; $i++)
              {
+                 if($end == null){
+                    $re = $re++;
+                    $ch = $checked;
+                 }
+                 else
                  //Chạy cho đến ngày kết thúc của hợp đồng
-                $ch =$this->cal2Day($day1,$contract->date_end);
+                 $ch =$this->cal2Day($day1,$contract->date_end);
+                //  dd($day1->addDay());
                 if($ch > 0)
                 {
                     $atten = new attendance;
@@ -176,11 +193,14 @@ class ajaxController extends Controller
 
             } 
         }
+    
         else 
-        return 1;       
+        return $re;       
     }
     public function EditAddAttend($id){
+
         $atten = attendance::find($id);
+        
         //Phép và công đã được duyệt thì không được thay đổi
         if($atten['status'] == 0 && $atten['permission'] == 1 ||$atten['status'] == 0 && $atten['permission'] == 0 || $atten['status'] == 1 && $atten['permission'] ==0 )
         {
@@ -274,6 +294,11 @@ class ajaxController extends Controller
     //Post Đơn xin phép
     public function postPer(postAjaxPermiss $request)
     {
+
+        //Lấy ngày hiện tại
+        $now = $this->gettimenow();
+        //THời gian bắt đầu và thời gian kết thúc
+        $day_n_s = (strtotime($request->date_start) - strtotime($now))/ (60 * 60 * 24);
         //Ngày bắt đầu hợp đồng
         $day_s = $this->getDaystart($request->id_contract);
         //Ngày kết thúc hợp đồng
@@ -307,7 +332,7 @@ class ajaxController extends Controller
         $permission = $this->checkDateStart($request->id_contract,$permi['date_start'],$permi['date_end']);
         // dd($permission);
         if($permission <= 0)
-        return redirect()->intended('admin/getPermission')->with('error','Ngày nghỉ đã tồn tại');
+        return redirect()->intended('admin/getPermission')->with('error','Ngày nghỉ đã tồn tại hoặc trùng ngày bắt đầu hoặc ngày kết thúc');
 
         //Kiểm tra còn hạn sử dụng của hợp đồng không
         $chec = $this->checkHSDContract($request->id_contract);
@@ -315,6 +340,9 @@ class ajaxController extends Controller
         return redirect()->intended('admin/getPermission')->with('error','Hợp đồng đã hết hạn');
         // dd($permi);
         else {
+            //THời gian hiện tại so với thười gian bắt đầu
+            if($day_n_s<0)
+            return back()->withInput()->with('error','Thời gian bắt đầu nghỉ không được dưới thời gian hiện tại');
             //
             if($day_ck>0)
             return redirect()->intended('admin/getPermission')->with('error','Ngày bắt đầu thấp hơn mức phạm vi hợp đồng');
@@ -430,5 +458,40 @@ class ajaxController extends Controller
     //Thống kê công theo tháng
     public function getPerMonth(){
          
+    }
+
+    //Lấy lương theo tháng
+    public function getMonthSalary($id){
+        if($id == "all")
+        $data = DB::table('account')->join('contract','contract.id_account','account.id')->join('salary','salary.id_attent','contract.id')->join('role','role.id','account.id_role')->get();
+        else
+        $data = DB::table('account')->join('contract','contract.id_account','account.id')->join('salary','salary.id_attent','contract.id')->join('role','role.id','account.id_role')->whereMonth('reviced_date',$id)->get();
+        // dd($data);
+        $num = 1;
+        $total = 0;
+        $sum = 0;
+        
+        foreach($data as $lt){
+            echo"
+            <tr>
+            <td>".$num++."</td>
+            <td>".$lt->name." </td>
+            <td>".$lt->passport." </td>
+            <td>".$lt->num_account." </td>
+            <td>".$lt->name_role." </td>
+            <td>".$lt->BHXH." </td>
+            <td>".number_format($lt->num_attendance)." </td>
+            <td>".number_format($lt->reward) ."</td>
+            <td>".number_format($lt->allowance)."</td>
+            <td>".number_format($lt->sum_position)." </td>
+            <td>".number_format($lt->sum_position*5/100)."</td>
+            <td>".number_format($lt->sum_position - $lt->sum_position*5/100 )." </td>
+            <td>".$lt->reviced_date." </td>
+            </tr> ";
+           
+        }
+            
+           
+        
     }
 }

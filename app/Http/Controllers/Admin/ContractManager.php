@@ -11,6 +11,7 @@ use App\Models\Type_contract;
 use App;
 use DB;
 use Carbon\Carbon;
+use App\Http\Requests\AddContract;
 
 class ContractManager extends Controller
 {
@@ -26,6 +27,11 @@ class ContractManager extends Controller
         $data = (strtotime($date_end) - strtotime($date_start))/ (60 * 60 * 24);
         return $data;   
 } 
+ //Chuyển đổi đinh dạng ngày
+ protected function formatDate($day)
+ {
+    return date("Y-m-d",strtotime($day));
+ }  
 
     //Hợp đồng
     //Lấy danh sách hợp đồng

@@ -2,10 +2,10 @@
 @extends('Admin.layout')
 @section('content')
 <div class="ibox-title">
-        <h5>Thêm hợp đồng <small>Thêm hợp đồng cho nhân viên.</small></h5>
-     </div>
+   <h5><a href="{{asset('admin/contract')}}">Danh sách hợp đồng </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Thêm hợp đồng</h5>':''!!} 
+</div>
      <div class="ibox-content">
-        <form method="post" class="form-horizontal">
+     <form method="POST" action="{{asset('admin/AddContract')}}" class="form-horizontal">
             {{ csrf_field() }}
            <div class="form-group">
               <label class="col-sm-2 control-label">Loại hợp đồng</label>

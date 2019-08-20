@@ -18,7 +18,8 @@
                     <th>Giới tính</th>
                     <th>Thông tin</th>
                     <th>Username</th>
-                    
+                    <th>BHXH</th>
+                    <th>STK</th>
                     <th>Chứng minh thư</th>
                     <th>Thêm</th>
                 </tr>
@@ -34,7 +35,8 @@
                         <td>{{$user->sex == 1?'Nam':'Nữ'}}</td>
                         <td>{!!$user->info!!}</td>
                         <td>{{$user->username}}</td>
-                        
+                        <td>{{$user->num_account}}</td>
+                        <td>{{$user->BHXH}}</td>
                         <td>{{$user->passport}}</td> 
                         <td>
                         <a href="{{asset('admin/editUser')."/".$user->id}}" class="btn btn-primary">Sửa</a>

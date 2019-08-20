@@ -58,6 +58,7 @@ class SalaryManager extends Controller
        //Số thứ tự
        $data['num']= 1;
        
+    //    dd($data);
        return view('Admin/Salary/main',$data);  
    }
    
@@ -65,7 +66,13 @@ class SalaryManager extends Controller
    public function postSalary(AddSalaryRequest $request,$id){
        //Kiểm tra thanh toán đã tồn tại chưa
        $salary = salary::find($id);
+    //    $salary= DB::table('salary')->->get();     \
+    // dd($sal); 
+    //    dd($salary);  
+    //    $salary = DB::table('salary')->where('id_attent',$id)->get();
+    //    dd($salary);
        //Nếu chưa thì tạo mới
+    //    dd($salary);
        if($salary==null)
        {
            $salary = new salary;
@@ -80,8 +87,8 @@ class SalaryManager extends Controller
            $salary['id_attent'] = $id;
            $salary->save();
        }
-       else
-       {
+       else{
+
            $salary['position'] = $request->position + $salary->position;
            $salary['reward'] = $request->reward + $salary->reward;
            //Lương theo ngày

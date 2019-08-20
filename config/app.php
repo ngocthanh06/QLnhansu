@@ -139,6 +139,10 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
+        //Execl
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        
+        
         //Form
         Collective\Html\HtmlServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
@@ -191,6 +195,7 @@ return [
     */
 
     'aliases' => [
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Form'=> Collective\Html\FormFacade::class,
         'Html'=>Collective\Html\HtmlFacade::class,
         'App' => Illuminate\Support\Facades\App::class,

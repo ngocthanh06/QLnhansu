@@ -5,9 +5,7 @@
 <div class="col-lg-12">
         <div class="ibox float-e-margins">
            <div class="ibox-title">
-              <h5 style="margin-top:2px">Tính lương hợp đồng nhân viên:</h5>
-              <span class="label label-info" style="font-size:15px"> {{$acc->name}}</span>
-              
+            <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Lương nhân viên '. $acc->name.'</h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/getAttendance/".$acc->id).'"><i><small>Công</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/EditContract/".$acc->id).'"><i><small>Sửa hợp đồng</small></i></a></h5><h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$acc->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}   
            </div>
            <div class="ibox-content">
               <div class="row">

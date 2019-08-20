@@ -1,10 +1,12 @@
+@php
+    $open = 'contract';
+@endphp
 @extends('Admin.layout')
 @section('content')
 <div class="col-lg-12">
     <div class="ibox float-e-margins">
     <div class="ibox-title">
-    <h5 style="margin-top:2px">Bảng chấm công:</h5>  
-    <span class="label label-info" style="font-size:15px"> {{$acc->name_contract}}</span>
+        <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Bảng chấm công '. $acc->name_contract.'</h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/salary/".$acc->id).'"><i><small>Lương</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/EditContract/".$acc->id).'"><i><small>Sửa hợp đồng</small></i></a></h5><h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$acc->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}   
     </div>
     <div class="ibox-content">
         <div class="row">
@@ -135,6 +137,7 @@
                             </tr>
                             </thead>
                             <tbody>   
+                                    <?php $num = 1; ?>
                                     @foreach ($contract as $item)
                                     <?php $id_contract = $item->id_contract ?>
                                 <tr>     
@@ -142,11 +145,11 @@
                                     {{-- Kiểm tra lấy ngày làm việc theo hợp đồng --}}
                                     <td>{{$start1}}</td>
                                     <?php
-                                       if((strtotime($end) - strtotime($start1))/ (60 * 60 * 24)>=0)
+                                       if((strtotime($end) - strtotime($start1))/ (60 * 60 * 24)>=0 || $end == null)
                                        {
                                            $start1 = Carbon\Carbon::parse($start1)->addDay();
                                            $start1 = Carbon\Carbon::parse($start1)->format('Y-m-d');    
-                                        }
+                                    }
                                     ?>
                                     <td>{{$item->day}}</td>
                                     <td>
@@ -207,7 +210,7 @@
                                     <td id="per"></td>
                                     <td>
                                             <div class="checkbox checkbox-success" style="margin-top: 0px;">
-                                            <input value="{{$acc->id}}" id="checkedAtt" type="checkbox">
+                                             <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{$start1}}" type="checkbox">
                                                     <label for="checkbox3"> </label>
                                             </div>
                                     </td>  
@@ -232,6 +235,9 @@
                                 @endif
                             </tbody>
                         </table>
+                        <div style="text-align:center">
+                        {{$contract->links()}}
+                        </div>
                     </div>
         </div>
         </div>

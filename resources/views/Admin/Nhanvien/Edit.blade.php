@@ -2,7 +2,7 @@
 @extends('Admin.layout')
 @section('content')
 <div class="ibox-title">
-        <h5>Thêm nhân viên <small>Thêm nhân viên hoặc Quản lý nhân sự.</small></h5>
+   <h5><a href="{{asset('admin/user')}}"> <i> <small> Danh sách nhân viên </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'account' ? '<h5>Sửa nhân viên</h5>':''!!} 
      </div>
      <div class="ibox-content">
         <form method="post" class="form-horizontal">
@@ -36,6 +36,21 @@
            <div class="col-sm-10">
               <input type="text" value="{{$user->address}}" name="address" placeholder="Nhập địa chỉ của bạn" class="form-control"></div>
            </div>
+           <div class="hr-line-dashed"></div>
+            <div class="form-group">
+             <label class="col-sm-2 control-label">Số tài khoản</label>
+          <div class="col-sm-10">
+              {!! Form::text('num_account', $user->num_account, array('placeholder'=>'Nhập thông tin tài khoản ngân hàng', 'class'=>'form-control')) !!}
+          </div>
+      
+            </div>
+          <div class="hr-line-dashed"></div>
+            <div class="form-group">
+             <label class="col-sm-2 control-label">Bảo hiểm xã hội</label>
+            <div class="col-sm-10">
+            {!! Form::text('BHXH', $user->BHXH, array('placeholder'=>'Nhập BHXH của nhân viên', 'class'=>'form-control')) !!}
+          </div>
+            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
               <label class="col-sm-2 control-label">Thông tin thêm</label>

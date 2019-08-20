@@ -7,6 +7,9 @@ use App\Models\account;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Admin\ExcelController;
+use Excel;
+
 
 class HomeController extends Controller
 {
@@ -31,6 +34,11 @@ class HomeController extends Controller
 
         
     }
-
+    //Gọi xuất excel
+    public function export(Request $request){
+        // dd($request->all());
+        return Excel::download(new ExcelController($request->month), 'LuongQLNSNV.xlsx');
+        
+    }
     
 }

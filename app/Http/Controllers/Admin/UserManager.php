@@ -23,7 +23,7 @@ class UserManager extends Controller
      public function getUser(){
         //Get quyền
         $data['role'] = $this->getrole();
-        $data['all_User'] =DB::table('account')->select('address','account.id','name','name_role','sex','info','username','passport')->leftjoin('role','role.id','account.id_role')->where('id_role','1')->orWhere('id_role','2')->paginate(5);
+        $data['all_User'] =DB::table('account')->select('address','account.id','name','name_role','sex','info','username','passport','account.num_account','account.BHXH')->leftjoin('role','role.id','account.id_role')->where('id_role','1')->orWhere('id_role','2')->paginate(5);
         return view('Admin/Nhanvien/main',$data);
     }
     //Get add nhân viên
@@ -43,6 +43,8 @@ class UserManager extends Controller
         $user['id_role'] = $request->id_role;
         $user['info'] = $request->info;
         $user['sex'] = $request->sex;
+        $user['num_account']=$request->num_account;
+        $user['BHXH'] = $request->BHXH;
         $user->save();
         return redirect()->intended('admin/user')->with('success','Thêm nhân viên thành công');
     }
@@ -66,6 +68,8 @@ class UserManager extends Controller
         $user['id_role'] = $request->id_role;
         $user['info'] = $request->info;
         $user['sex'] = $request->sex;
+        $user['num_account']= $request->num_account;
+        $user['BHXH'] = $request->BHXH;
         if(!empty($user->getDirty())){
            $user->update();
            return redirect()->intended('admin/user')->with('success','Sửa thông tin thành công');

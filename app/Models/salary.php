@@ -12,5 +12,7 @@ class salary extends Model
     protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = [];
+    
+    
 
     }

@@ -76,10 +76,11 @@ Route::group(['namespace'=>'Admin'],function(){
         //Post Lương
         Route::post('salary/{id}','SalaryManager@postSalary');
 
-        //Bảng công
+        //Bảng lương
         Route::get('GetAtendance','AttendanceManager@GetAtendance');
 
-       
+        //Export Excel
+        Route::post('Export','HomeController@export');
 
     });
 });
@@ -109,13 +110,14 @@ Route::group(['namespace' =>'Ajax'],function(){
         Route::get('cancelPerr/{id}','AjaxController@cancelPerr');
         //Lấy đơn xin phép 
         Route::get('checkPermiss/{id}','AjaxController@checkPermiss');
-
-       
-
-
-        
         //THống kê tháng chưa làm
         Route::get('getPerMonth','AjaxController@getPerMonth');
+
+        //lấy lương theo tháng 
+        Route::get('getMonthSalary/{id}','AjaxController@getMonthSalary');
+        
+
+       
     });
 
 

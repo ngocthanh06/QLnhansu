@@ -2,7 +2,7 @@
 @extends('Admin.layout')
 @section('content')
 <div class="ibox-title">
-        <h5>Hủy hợp đồng <small>Hủy hợp đồng cho nhân viên.</small></h5>
+    <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Hủy hợp đồng </h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/salary/".$contract->id).'"><i><small>Lương</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/getAttendance/".$contract->id).'"><i><small>Công</small></i></a></h5><h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/EditContract/".$contract->id).'"><i><small>Sửa hợp đồng</small></i></a></h5>':''!!} 
      </div>
      <div class="ibox-content">
         <form method="post" class="form-horizontal">
