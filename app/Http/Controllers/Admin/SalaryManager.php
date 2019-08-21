@@ -81,7 +81,6 @@ class SalaryManager extends Controller
         $data['info'] = $this->getAtt($id);
         //Lấy số ngày công đã làm
         $data['att'] = count($this->getAtt($id));
-
         //Lấy số ngày công đã thanh toán
         $sumpay = $this->getPay($id);
         $data['pay'] = 0;

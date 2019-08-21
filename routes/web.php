@@ -122,6 +122,7 @@ Route::group(['namespace' =>'Ajax'],function(){
         Route::get('getSalaryMonth','AjaxController@getSalaryMonth');
 
 
+
     });
 
 

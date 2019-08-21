@@ -59,10 +59,8 @@
                             IN+
                         </div>
                     </li>
-                    <li class="<?php echo isset($open) && $open == 'home' ?'active':'' ?>">
-                        <a href="{{asset('admin/home')}}"><i class="fa fa-th-large"></i> <span class="nav-label">Thông tin</span></span></a>
-                        @if($role->id == 1)
-                    </li>
+
+                    @if($role->id == 1)
                     <li class="<?php echo isset($open) && $open == 'account' ?'active':'' ?>">
                     <a href="{{asset('admin/user')}}"><i class="fa fa-diamond"></i> <span class="nav-label">Danh sách nhân viên</span></a>
                     </li>
@@ -78,12 +76,13 @@
                     <a class="<?php echo isset($open) && $open == 'GetAttendance' ?'active':'' ?>" href="{{asset('admin/GetAtendance')}}"><i class="fa fa-flask"></i> <span class="nav-label">Bảng lương</span></a>
                     </li>
                     @else
+                     <li class="<?php echo isset($open) && $open == 'home' ?'active':'' ?>">
+                      <a href="{{asset('admin/home')}}"><i class="fa fa-th-large"></i> <span class="nav-label">Thông tin</span></span></a>
+                      </li>
                     <li class="<?php echo isset($open) && $open == 'permission' ?'active':'' ?>">
                     <a href="{{asset('admin/getPermission')}}"><i class="fa fa-pie-chart"></i> <span class="nav-label">Xin nghỉ phép</span>  </a>
                     </li>
-                    <li>
-                        <a href="widgets.html"><i class="fa fa-flask"></i> <span class="nav-label">Widgets</span></a>
-                    </li>
+
                     @endif
                 </ul>
 
@@ -792,86 +791,48 @@
 
         });
 
-
         /* initialize the calendar
          -----------------------------------------------------------------*/
         var date = new Date();
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
-
-        $('#calendar').fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            editable: true,
-            droppable: true, // this allows things to be dropped onto the calendar
-            drop: function() {
-                // is the "remove after drop" checkbox checked?
-                if ($('#drop-remove').is(':checked')) {
-                    // if so, remove the element from the "Draggable Events" list
-                    $(this).remove();
-                }
-            },
-            events: [{
-                    title: 'All Day Event',
-                    start: new Date(y, m, 1)
+        @php
+            $get = DB::table('contract')->join('attendance','contract.id','attendance.id_contract')->where('attendance.status',1)->whereNull('contract.date_end')->where('contract.id_account',Auth::user()->id)->get();
+        @endphp
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
                 },
-                {
-                    title: 'Long Event',
-                    start: new Date(y, m, d - 5),
-                    end: new Date(y, m, d - 2)
+                editable: true,
+                droppable: true, // this allows things to be dropped onto the calendar
+                drop: function() {
+                    // is the "remove after drop" checkbox checked?
+                    if ($('#drop-remove').is(':checked')) {
+                            // if so, remove the element from the "Draggable Events" list
+                        $(this).remove();
+                    }
                 },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d - 3, 16, 0),
-                    allDay: false
-                },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d + 4, 16, 0),
-                    allDay: false
-                },
-                {
-                    title: 'Meeting',
-                    start: new Date(y, m, d, 10, 30),
-                    allDay: false
-                },
-                {
-                    title: 'Lunch',
-                    start: new Date(y, m, d, 12, 0),
-                    end: new Date(y, m, d, 14, 0),
-                    allDay: false
-                },
-                {
-                    title: 'Birthday Party',
-                    start: new Date(y, m, d + 1, 19, 0),
-                    end: new Date(y, m, d + 1, 22, 30),
-                    allDay: false
-                },
-                {
-                    title: 'Click for Google',
-                    start: new Date(y, m, 28),
-                    end: new Date(y, m, 29),
-                    url: 'http://google.com/'
-                }
-            ]
-        });
-
-
+                events: [
+                     @foreach($get as $va)
+                    {
+                        id: '{{$va->id}}',
+                        title: 'Đi làm',
+                        start: new Date('{{$va->day}}'),
+                        allDay: false,
+                    },
+                    @endforeach
+                ],
+                });
     });
 
 </script>
     {{-- end --}}
 
-
     {{-- xử lý hợp đồng --}}
     <script >
-
         //Lịch
         $(function() {
             $('input[name="date_now"]').daterangepicker({
@@ -879,13 +840,9 @@
                 opens: 'right'
             }, function(start, end, label) {});
         });
-
     //Lấy hợp đồng
     $(document).ready(function() {
-
-
         //Select lương theo tháng
-
         $('#month').on('change',function(){
             var id = $(this).val();
             $.get("{{asset('ajax/getMonthSalary')}}" + '/' +id,function(data){
@@ -895,33 +852,14 @@
         });
 
 
-        //alert('Đã chạy được');//Kiểm tra script chạy được chưa
-        $("#contract").on('click', function() {
-            var idSemester = $(this).val(); //Gọi thể loại để thực hiện thay đổi
-            //đang timg bug lỗi
-            $.get("{{asset('ajax/getcontract')}}" + '/' + idSemester, function(data) {
-                //
-                // console.log(data);
-                $('#show').html(data);
-                // $('#show1').html(data);
-            });
 
-            //lấy id của hợp đồng để lấy số ngày làm status 1
-            $.get("{{asset('ajax/gethopdong')}}" + '/' + idSemester, function(data) {
-
-                $('#show1').html(data);
-            });
-        });
 
         //DataTable
         $('#table_id').DataTable();
-
-
-        //Thống kê danh sách chấm công theo tháng
+         //Thống kê danh sách chấm công theo tháng
         $('#option3').on('click',function(){
             $.get("{{asset('ajax/getPerMonth')}}", function(data) {
 
-                // $('#show1').html(data);
             });
         });
 
@@ -1009,15 +947,8 @@
                     $('#sub').removeAttr('disabled');
                     $('#start1').val(data);
                 }
-                // alert('Hợp đồng vẫn còn thời hạn sử dụng');
             });
         });
-
-        //
-
-
-
-
     });
     //Set lương thực lãnh
     function setSalary() {
@@ -1033,9 +964,6 @@
             var sa = $('#salary_day1').val();
             var re = $('#reward1').val();
             var po = $('#position1').val();
-            // console.log(num);
-            console.log(re);
-            // console.log(po);
             $('#sum_position1').val(formatNumber(parseInt(num) * parseInt(sa) + parseInt(re) + parseInt(po), '.', ',') + ' VND');
         }
 
@@ -1101,8 +1029,6 @@
         });
     }
 
-
-
     function submitok() {
         var a = $("#lido").val();
         console.log(a);
@@ -1133,7 +1059,6 @@
                 toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
 
             }, 1300);
-
 
             var data1 = [
                 [0, 4],

@@ -105,28 +105,6 @@ class ajaxController extends Controller
 
 
     }
-    //Lấy hợp đồng
-    public function gethopdong($idhopdong){
-        //Lấy id của hợp đồng thông qua models contract
-        $loai = contract::find($idhopdong);
-        //tiingr số công làm được
-        $day_attendance = $loai->getPermi;
-        //Ngày nghỉ có phép
-        $sum_per = Count($loai->getAtt);
-        //Ngày nghỉ không phép
-        $sum_mis = Count($loai->getAttend);
-        //Tổng số ngày nghỉ
-        $sum_permiss = count($loai->get_pre_pre);
-        //Số ngày phép còn lại
-        $pre_pre = $loai->num_max - $sum_permiss;
-
-        // $day_work = $loai->getAttend;
-        echo "<h4> Số ngày công: ".$day_attendance->num_attendance."</h4>";
-        echo "<h4> Số ngày nghỉ: ".$sum_permiss."</h4>";
-        echo "<h4> Có phép: ".$sum_mis."</h4>";
-        echo "<h4> Không phép: ".$sum_mis."</h4>";
-        echo "<h4> Ngày nghỉ còn lại: ".$pre_pre." phép </h4>";
-    }
 
     //Get Addcontract Homecontroller
     public function getaddcontract($id){
@@ -521,7 +499,6 @@ class ajaxController extends Controller
 
 
     }
-
 
 
 }

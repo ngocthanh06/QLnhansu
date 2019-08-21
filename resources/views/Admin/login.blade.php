@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="{{asset('qlns')}}/">
-    <title>INSPINIA | Login</title>
+    <title>Quản lý nhân sự | Login</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -23,7 +23,7 @@
             <div>
 
                 <h1 class="logo-name">QLNS</h1>
-                
+
             </div>
             <h3>Chào mừng đến trang đăng nhập</h3>
             <p>Đăng nhập để được truy cập vào tài khoản.
