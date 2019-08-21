@@ -61,23 +61,23 @@
                     </li>
                     <li class="<?php echo isset($open) && $open == 'home' ?'active':'' ?>">
                         <a href="{{asset('admin/home')}}"><i class="fa fa-th-large"></i> <span class="nav-label">Thông tin</span></span></a>
-                        @if($role->id == 1)  
+                        @if($role->id == 1)
                     </li>
                     <li class="<?php echo isset($open) && $open == 'account' ?'active':'' ?>">
                     <a href="{{asset('admin/user')}}"><i class="fa fa-diamond"></i> <span class="nav-label">Danh sách nhân viên</span></a>
                     </li>
                     <li class="<?php echo isset($open) && $open == 'type_contract' ?'active':'' ?>">
                     <a href="{{asset('admin/type_contract')}}"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Loại hợp đồng</span></span></a>
-                        
+
                     </li>
                     <li class="<?php echo isset($open) && $open == 'contract' ?'active':'' ?>">
                     <a  href="{{asset('admin/contract')}}"><i class="fa fa-envelope"></i> <span class="nav-label">Hợp đồng </span></a>
-                     
+
                     </li>
-                    <li>    
+                    <li>
                     <a class="<?php echo isset($open) && $open == 'GetAttendance' ?'active':'' ?>" href="{{asset('admin/GetAtendance')}}"><i class="fa fa-flask"></i> <span class="nav-label">Bảng lương</span></a>
                     </li>
-                    @else 
+                    @else
                     <li class="<?php echo isset($open) && $open == 'permission' ?'active':'' ?>">
                     <a href="{{asset('admin/getPermission')}}"><i class="fa fa-pie-chart"></i> <span class="nav-label">Xin nghỉ phép</span>  </a>
                     </li>
@@ -216,7 +216,7 @@
 
         </nav>
         </div>
-              
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="wrapper wrapper-content">
@@ -703,7 +703,7 @@
         </div>
     </div>
 
-    
+
     <!-- Mainly scripts -->
     <script src="js/jquery-2.1.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -744,7 +744,7 @@
     <script src="js/plugins/toastr/toastr.min.js"></script>
 
     {{-- Lịch --}}
-    
+
     <script src="js/plugins/fullcalendar/moment.min.js"></script>
     <!-- jQuery UI custom -->
     <script src="js/jquery-ui.custom.min.js"></script>
@@ -867,10 +867,11 @@
 
 </script>
     {{-- end --}}
-    
+
 
     {{-- xử lý hợp đồng --}}
     <script >
+
         //Lịch
         $(function() {
             $('input[name="date_now"]').daterangepicker({
@@ -881,8 +882,10 @@
 
     //Lấy hợp đồng
     $(document).ready(function() {
+
+
         //Select lương theo tháng
-        
+
         $('#month').on('change',function(){
             var id = $(this).val();
             $.get("{{asset('ajax/getMonthSalary')}}" + '/' +id,function(data){
@@ -897,19 +900,19 @@
             var idSemester = $(this).val(); //Gọi thể loại để thực hiện thay đổi
             //đang timg bug lỗi
             $.get("{{asset('ajax/getcontract')}}" + '/' + idSemester, function(data) {
-                //  
+                //
                 // console.log(data);
                 $('#show').html(data);
                 // $('#show1').html(data);
             });
-    
+
             //lấy id của hợp đồng để lấy số ngày làm status 1
             $.get("{{asset('ajax/gethopdong')}}" + '/' + idSemester, function(data) {
-    
+
                 $('#show1').html(data);
             });
         });
-        
+
         //DataTable
         $('#table_id').DataTable();
 
@@ -917,15 +920,38 @@
         //Thống kê danh sách chấm công theo tháng
         $('#option3').on('click',function(){
             $.get("{{asset('ajax/getPerMonth')}}", function(data) {
-    
+
                 // $('#show1').html(data);
             });
         });
 
+        //Lương trong bảng tính nhân viên theo tháng
+
+        //Lấy số công thanh toán còn lại trong salary
+        $("#num_done1").on('change', function() {
+            var num_attend = $('#num_attendance1').val();
+            var num_done = $('#num_done1').val();
+            $('#num_aa1').val(num_attend - num_done);
+            setSalary1();
+        });
+
+        //set lương theo ngày
+        $('#salary_day1').on('change', function() {
+            setSalary1();
+        });
+        //Set thưởng
+        $('#reward1').on('change', function() {
+            setSalary1();
+        });
+        //Set phụ cấp
+        $('#position1').on('change', function() {
+            setSalary1();
+        });
+
         //Lấy số phép tối đa và hệ số lương
-    
+
         $("#id_type_contract").on('click', function() {
-    
+
             var id = $(this).val();
             if (id == 1) {
                 $("#num_max").val(20);
@@ -936,7 +962,7 @@
                 $('#coefficients').val(1);
                 $('#coefficients').removeAttr('disabled');
             }
-    
+
         });
         //Lấy số công thanh toán còn lại trong salary
         $("#num_done").on('change', function() {
@@ -945,7 +971,7 @@
             $('#num_aa').val(num_attend - num_done);
             setSalary();
         });
-    
+
         //set lương theo ngày
         $('#salary_day').on('change', function() {
             setSalary();
@@ -958,19 +984,19 @@
         $('#position').on('change', function() {
             setSalary();
         });
-    
+
         //Lấy id của tên nhân viên trong modul addContract
         $("#account").on('change', function() {
             var idSemester = $(this).val(); //Gọi thể loại để thực hiện thay đổi
             //đang timg bug lỗi
             $.get("{{asset('ajax/getaddcontract')}}" + '/' + idSemester, function(data) {
-                //  
+                //
                 $('#getAccount').val(data);
                 // $('#show1').html(data);
             });
             $.get("{{asset('ajax/getaddDatecontract')}}" + '/' + idSemester, function(data) {
-                //  
-    
+                //
+
                 if (data == 1) {
                     $('#data_2').attr('disabled', 'disabled');
                     $('#data_2').attr('disabled', 'disabled');
@@ -986,12 +1012,12 @@
                 // alert('Hợp đồng vẫn còn thời hạn sử dụng');
             });
         });
-    
-        //   
-    
-    
-    
-    
+
+        //
+
+
+
+
     });
     //Set lương thực lãnh
     function setSalary() {
@@ -1001,7 +1027,18 @@
         var po = $('#position').val();
         $('#sum_position').val(formatNumber(parseInt(num) * parseInt(sa) + parseInt(re) + parseInt(po), '.', ',') + ' VND');
     }
-    
+
+        function setSalary1() {
+            var num = $('#num_done1').val();
+            var sa = $('#salary_day1').val();
+            var re = $('#reward1').val();
+            var po = $('#position1').val();
+            // console.log(num);
+            console.log(re);
+            // console.log(po);
+            $('#sum_position1').val(formatNumber(parseInt(num) * parseInt(sa) + parseInt(re) + parseInt(po), '.', ',') + ' VND');
+        }
+
     //Format định dạng tiền VND
     function formatNumber(nStr, decSeperate, groupSeperate) {
         nStr += '';
@@ -1027,8 +1064,8 @@
             }
         });
     }
-    
-    
+
+
     function checkedAtt(e) {
         $.get("{{asset('ajax/CreateAddAttend')}}" + "/" + e.value + "/" + e.id, function(data) {
             if (data >= 1) {
@@ -1039,7 +1076,7 @@
         });
         //    }
     }
-    
+
     function checkonclick(e) {
         if ($("input[type='checkbox']:checked")) {
             $.get("{{asset('ajax/EditAddAttend')}}" + "/" + e.id, function(data) {
@@ -1051,26 +1088,26 @@
             });
         }
     }
-    
+
     function checkID(e) {
         $.get("{{asset('ajax/ShowAttendPermi')}}" + "/" + e.id, function(data) {
             $('#showw').html(data);
         });
     }
-    
+
     function showPer(e) {
         $.get("{{asset('ajax/ShowAttendContr')}}" + "/" + e.id, function(data) {
             $('#showw').html(data);
         });
     }
-    
-    
-    
+
+
+
     function submitok() {
         var a = $("#lido").val();
         console.log(a);
     }
-    
+
     // CK editor
     if (window.editor) {
         ClassicEditor
@@ -1079,11 +1116,11 @@
                 console.error(error);
             });
     }
-    
-    
+
+
     </script>
-    
-    
+
+
     <script >
         $(document).ready(function() {
             setTimeout(function() {
@@ -1094,10 +1131,10 @@
                     timeOut: 4000
                 };
                 toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
-    
+
             }, 1300);
-    
-    
+
+
             var data1 = [
                 [0, 4],
                 [1, 8],
@@ -1170,7 +1207,7 @@
                 },
                 tooltip: false
             });
-    
+
             var doughnutData = [{
                     value: 300,
                     color: "#a3e1d4",
@@ -1190,7 +1227,7 @@
                     label: "Laptop"
                 }
             ];
-    
+
             var doughnutOptions = {
                 segmentShowStroke: true,
                 segmentStrokeColor: "#fff",
@@ -1201,10 +1238,10 @@
                 animateRotate: true,
                 animateScale: false
             };
-    
+
             // var ctx = document.getElementById("doughnutChart").getContext("2d");
             // var DoughnutChart = new Chart(ctx).Doughnut(doughnutData, doughnutOptions);
-    
+
             var polarData = [{
                     value: 300,
                     color: "#a3e1d4",
@@ -1224,7 +1261,7 @@
                     label: "Laptop"
                 }
             ];
-    
+
             var polarOptions = {
                 scaleShowLabelBackdrop: true,
                 scaleBackdropColor: "rgba(255,255,255,0.75)",
@@ -1242,8 +1279,8 @@
             };
             // var ctx = document.getElementById("polarChart").getContext("2d");
             // var Polarchart = new Chart(ctx).PolarArea(polarData, polarOptions);
-    
-        }); 
+
+        });
     </script>
 </body>
 </html>

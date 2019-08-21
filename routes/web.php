@@ -46,8 +46,8 @@ Route::group(['namespace'=>'Admin'],function(){
         //
         //Loại hợp đồng
         Route::get('type_contract','TypeContractManager@getTypeContract');
-        
-        
+
+
 
         //Hợp đồng
         //Lấy danh sách loại hợp đồng
@@ -70,11 +70,14 @@ Route::group(['namespace'=>'Admin'],function(){
         //Xin nghỉ phép
         Route::get('getPermission','PermissionManager@getPermission');
 
+
         //Lương
         //Get lương
         Route::get('salary/{id}','SalaryManager@getSalary');
         //Post Lương
         Route::post('salary/{id}','SalaryManager@postSalary');
+        //Lấy lương theo tháng mới
+        Route::post('getMonth','SalaryManager@PostMonth');
 
         //Bảng lương
         Route::get('GetAtendance','AttendanceManager@GetAtendance');
@@ -101,23 +104,24 @@ Route::group(['namespace' =>'Ajax'],function(){
         Route::get('EditAddAttend/{id}','AjaxController@EditAddAttend');
         //ShowCOntractAttend
         Route::get('ShowAttendContr/{id}','AjaxController@ShowAttendContr');
-        //Post 
+        //Post
         Route::get('postPer','AjaxController@postPer');
 
         //Showw Perr
         Route::get('ShowAttendPermi/{id}','AjaxController@ShowAttendPermi');
         //Cancel Per
         Route::get('cancelPerr/{id}','AjaxController@cancelPerr');
-        //Lấy đơn xin phép 
+        //Lấy đơn xin phép
         Route::get('checkPermiss/{id}','AjaxController@checkPermiss');
         //THống kê tháng chưa làm
         Route::get('getPerMonth','AjaxController@getPerMonth');
 
-        //lấy lương theo tháng 
+        //lấy lương theo tháng
         Route::get('getMonthSalary/{id}','AjaxController@getMonthSalary');
-        
 
-       
+        Route::get('getSalaryMonth','AjaxController@getSalaryMonth');
+
+
     });
 
 

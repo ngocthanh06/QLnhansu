@@ -46,7 +46,7 @@ class AttendanceManager extends Controller
         //Số ngày đã làm
         $data['work'] =count($this->getAtt($id));
         //Cập nhật thông tin của ngày công trong bảng lương
-        $salary = DB::table('salary')->where('id_attent',$id)->update(['num_attendance'=>$data['work']]);
+//        $salary = DB::table('salary')->where('id_attent',$id)->update(['num_attendance'=>$data['work']]);
        //  $salary->save();
         //Thông tin tài khoản
         $data['acc'] = $info->getAccount($id);
@@ -79,12 +79,11 @@ class AttendanceManager extends Controller
        //Get quyền
        $role = $this->getrole();
        //Lấy danh sách nhân viên join hợp đồng, lương
-       $list = DB::table('account')->join('contract','contract.id_account','account.id')->join('salary','salary.id_attent','contract.id')->join('role','role.id','account.id_role')->get();     
-    //    dd($list);
+       $list = DB::table('account')->join('contract','contract.id_account','account.id')->join('salary','salary.id_attent','contract.id')->join('role','role.id','account.id_role')->get();
        $num =1;
        return view('Admin/Attendance/GetAttendance',compact('role','list','num'));
    }
 
-   
+
 
 }

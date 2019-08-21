@@ -5,11 +5,11 @@
 <div class="col-lg-12">
         <div class="ibox float-e-margins">
            <div class="ibox-title">
-            <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Lương nhân viên '. $acc->name.'</h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/getAttendance/".$acc->id).'"><i><small>Công</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/EditContract/".$acc->id).'"><i><small>Sửa hợp đồng</small></i></a></h5><h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$acc->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}   
+            <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Lương nhân viên '. $acc->name.'</h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/getAttendance/".$acc->id).'"><i><small>Công</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/EditContract/".$acc->id).'"><i><small>Sửa hợp đồng</small></i></a></h5><h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$acc->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}
            </div>
            <div class="ibox-content">
               <div class="row">
-                
+
                  <div class="col-lg-3">
                     <div class="contact-box center-version">
                        <a href="profile.html">
@@ -25,27 +25,27 @@
                                 if(!isset($acc->date_end))
                                 echo "Không xác định";
                                 else echo $acc->date_end
-                                ?>    
+                                ?>
                              </strong><br>
-                             Số ngày làm việc trên hợp đồng:<strong> 
+                             Số ngày làm việc trên hợp đồng:<strong>
                                  <?php
                                  if($acc->date_end == null)
                                  echo 'Không xác định';
-                                 else 
-                                 echo $acc->num_work; 
+                                 else
+                                 echo $acc->num_work;
                                     ?></strong><br>
-                             Hệ số lương:<strong> {{$acc->coefficients}}</strong><br> 
+                             Hệ số lương:<strong> {{$acc->coefficients}}</strong><br>
                              Số ngày nghỉ phép tối đa:<strong> {{$acc->num_max}}</strong><br>
                              Số ngày đã làm: <strong>{{$att}}</strong><br>
                           </address>
                           <div >
-                                <a class="btn btn-success" href="{{asset('admin/getAttendance')."/".$acc->id}}" style="margin-left:50px" >Xem chi tiết công</a>  
+                                <a class="btn btn-success" href="{{asset('admin/getAttendance')."/".$acc->id}}" style="margin-left:50px" >Xem chi tiết công</a>
                           </div>
-                    </div>  
+                    </div>
                  </div>
-                 
+
                  <div class="col-lg-9">
-                        <div class="ibox-content">
+                        <div class="ibox-content" id="AddSalary">
                            @if(count($salary)!=0)
                                 <table class="table">
                                     <thead>
@@ -64,26 +64,32 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    
+
                                         @foreach($salary as $sa)
                                     <tr>
                                         <td>{{$num++}}</td>
                                         <td>{{$sa->num_attendance}}</td>
                                         <td>{{$sa->num_done}} công</td>
-                                    <td>{{$sa->num_attendance - $sa->num_done}} công</td>
-                                    <td>{{number_format($sa->allowance * ($sa->num_attendance - $sa->num_done))}} VND</td>
-                                    <td>{{number_format($sa->allowance *$sa->num_done )}} VND</td>
-                                    <td>{{number_format($sa->reward)}} VND</td>
-                                    <td>{{number_format($sa->position)}} VND</td>
-                                    <td>{{number_format($sa->sum_position)}} VND</td>
-                                    <td>{{$sa->reviced_date}}</td>                                  
-                                    
+                                        <td>{{$sa->num_attendance - $sa->num_done}} công</td>
+                                        <td>{{number_format($sa->allowance * ($sa->num_attendance - $sa->num_done))}} VND</td>
+                                        <td>{{number_format($sa->allowance *$sa->num_done )}} VND</td>
+                                        <td>{{number_format($sa->reward)}} VND</td>
+                                        <td>{{number_format($sa->position)}} VND</td>
+                                        <td>{{number_format($sa->sum_position)}} VND</td>
+                                        <td>{{$sa->reviced_date}}</td>
+                                     @php
+                                         $monthNow = Carbon\Carbon::parse($now)->month;
+                                         $yearNow = Carbon\Carbon::parse($now)->year;
+                                         $monthReviced = Carbon\Carbon::parse($sa->reviced_date)->month;
+                                         $yearReviced = Carbon\Carbon::parse($sa->reviced_date)->year;
+                                     @endphp
+
                                     @if($sa->num_attendance - $sa->num_done != 0)
-                                    <td><button class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal{{$sa->id}}" value="{{$sa->id}}">Thanh toán</button></td>
-                                        <!-- Modal -->
+                                    <td><button class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal{{$sa->id}}" {{$monthReviced < $monthNow ? 'disabled':'' }} value="{{$sa->id}}">Thanh toán</button></td>
+                                            <!-- Modal -->
                                         <div id="myModal{{$sa->id}}" class="modal fade" role="dialog">
                                                 <div class="modal-dialog">
-                                            
+
                                                 <!-- Modal content-->
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -126,9 +132,9 @@
                                                                     </div>
                                                             </form>
                                                     </div>
-                                                   
+
                                                 </div>
-                                            
+
                                                 </div>
                                             </div>
                                     @else
@@ -136,52 +142,117 @@
                                     @endif
 
                                     </tr>
-                                    @endforeach      
-                                    </tbody>                                  
+                                    @endforeach
+                                    </tbody>
+                                    @if($monthNow > $monthReviced ||$monthNow> $yearReviced)
+                                        <div style="text-align: left">
+                                            <button class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal">Thanh toán lương tháng {{$monthNow}}</button>
+                                            <!-- Modal -->
+                                            <div id="myModal" class="modal fade" role="dialog">
+                                                <div class="modal-dialog">
+
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h4 class="modal-title">Bảng tính lương của nhân viên</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="{{asset('admin/getMonth')}}" method="POST" >
+                                                                {{ csrf_field() }}
+                                                                <div class="form-group">
+                                                                    <label for="usr">Số ngày công:</label>
+                                                                    <<input type="text" id='num_attendance1' name="num_attendance" value="{{$att-$pay}}" readonly placeholder="Số ngày công của nhân viên" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="usr">Số công thanh toán:</label>
+                                                                    <input id="num_done1" name="num_done" type="number" min="0" max="{{$att - $pay}}" value="{{$att - $pay}}" placeholder="Số công thanh toán" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="usr">Số công còn lại:</label>
+                                                                    <input id='num_aa1' name="num_aa" type="number" readonly placeholder="Số công còn lại" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="usr">Lương theo ngày:</label>
+                                                                    <input id="salary_day1" required name="salary_date" step="100000" type="number" placeholder="Lương của công nhân" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="usr">Thưởng:</label>
+                                                                    <input type="number" name="reward" value="0" step="100000" id="reward1" placeholder="Thưởng" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="usr">Phụ cấp:</label>
+                                                                    <input type="number" id="position1" value="0" step="100000" name="position" placeholder="Phụ cấp" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="usr">Thực lãnh:</label>
+                                                                    <input type="text" id="sum_position1" value="" name="sum_postion" readonly placeholder="Thực lãnh" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="usr">Ngày lãnh:</label>
+                                                                    <input type="text" id='data_2' name="date_now" placeholder="Ngày lãnh" class="form-control">
+                                                                </div>
+                                                                <input type="hidden" name="id" value="{{$id}}">
+                                                                <div class="form-group">
+                                                                    <div style="text-align: right" >
+                                                                        <button  class="btn btn-danger" type="submit">Lưu</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </table>
                             @else
                             <form class="form-horizontal" method="POST"  >
                                     {{ csrf_field() }}
                                     <h4> Bảng tính lương của nhân viên</h4>
                                     <div class="form-group"><label class="col-lg-2 control-label">Số ngày công</label>
-    
-                                    <div class="col-lg-10"><input type="text" id='num_attendance' name="num_attendance" value="{{$att}}" readonly placeholder="Số ngày công của nhân viên" class="form-control"> 
+
+                                    <div class="col-lg-10">
+                                        <input type="text" id='num_attendance' name="num_attendance" value="{{$att}}" readonly placeholder="Số ngày công của nhân viên" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-lg-2 control-label">Số công thanh toán</label>
-    
-                                    <div class="col-lg-10"><input id="num_done" name="num_done" type="number" min="0" max="{{$att}}" value="{{$att}}" placeholder="Số công thanh toán" class="form-control">
+
+                                    <div class="col-lg-10">
+                                        <input id="num_done" name="num_done" type="number" min="0" max="{{$att}}" value="{{$att}}" placeholder="Số công thanh toán" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-lg-2 control-label">Số công còn lại</label>
-    
-                                        <div class="col-lg-10"><input id='num_aa' name="num_aa" type="number" readonly placeholder="Số công còn lại" class="form-control"> 
+
+                                        <div class="col-lg-10">
+                                            <input id='num_aa' name="num_aa" type="number" readonly placeholder="Số công còn lại" class="form-control">
                                         </div>
                                     </div>
-                                   
-                                    
                                     <div class="form-group"><label class="col-lg-2 control-label">Lương theo ngày</label>
-    
-                                        <div class="col-lg-10"><input id="salary_day" required name="salary_date" step="100000" type="number" placeholder="Lương của công nhân" class="form-control"> 
+
+                                        <div class="col-lg-10">
+                                            <input id="salary_day" required name="salary_date" step="100000" type="number" placeholder="Lương của công nhân" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-lg-2 control-label">Thưởng</label>
-    
-                                        <div class="col-lg-10"><input type="number" name="reward" value="0" step="100000" id="reward" placeholder="Thưởng" class="form-control"> 
+
+                                        <div class="col-lg-10">
+                                            <input type="number" name="reward" value="0" step="100000" id="reward" placeholder="Thưởng" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-lg-2 control-label">Phụ cấp</label>
-    
+
                                         <div class="col-lg-10"><input type="number" id="position" value="0" step="100000" name="position" placeholder="Phụ cấp" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-lg-2 control-label">Thực lãnh</label>
-    
-                                        <div class="col-lg-10"><input type="text" id="sum_position" name="sum_postion" readonly placeholder="Thực lãnh" class="form-control"> 
+                                        <div class="col-lg-10"><input type="text" id="sum_position" name="sum_postion" readonly placeholder="Thực lãnh" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-lg-2 control-label">Ngày lãnh</label>
-    
+
                                     <div class="col-lg-10"><input type="text" id='data_2' name="date_now" placeholder="Ngày lãnh" class="form-control">
                                         </div>
                                     </div>
@@ -194,13 +265,13 @@
                             @endif
                         </div>
                  </div>
-                
+
               </div>
-              
+
            </div>
-           
+
         </div>
-        
-     </div> 
+
+     </div>
 
 @stop

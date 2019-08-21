@@ -6,7 +6,7 @@
 <div class="col-lg-12">
     <div class="ibox float-e-margins">
     <div class="ibox-title">
-        <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Bảng chấm công '. $acc->name_contract.'</h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/salary/".$acc->id).'"><i><small>Lương</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/EditContract/".$acc->id).'"><i><small>Sửa hợp đồng</small></i></a></h5><h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$acc->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}   
+        <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Bảng chấm công '. $acc->name_contract.'</h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/salary/".$acc->id).'"><i><small>Lương</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/EditContract/".$acc->id).'"><i><small>Sửa hợp đồng</small></i></a></h5><h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$acc->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}
     </div>
     <div class="ibox-content">
         <div class="row">
@@ -24,15 +24,15 @@
                         </div>
                     </div>
         <div class="col-lg-3">
-               
+
                 <div class="contact-box center-version">
 
                         <a href="profile.html">
-    
+
                             <img alt="image" class="img-circle" src="img/a2.jpg">
 
                             <h3 class="m-b-xs"><strong>{{$acc->name}}</strong></h3>
-    
+
                             <div class="font-bold">{{$acc->name_role}}</div>
                             <address class="m-t-md">
                                 <strong>{{$acc->name_type}}</strong><br>
@@ -43,19 +43,16 @@
                                 if(!isset($acc->date_end))
                                 echo "Không xác định";
                                 else echo $acc->date_end
-                            ?>    
+                            ?>
                             </strong><br>
                             Số ngày làm việc trên hợp đồng:<strong> {{$acc->num_work}}</strong><br>
-                            Hệ số lương:<strong> {{$acc->coefficients}}</strong><br> 
+                            Hệ số lương:<strong> {{$acc->coefficients}}</strong><br>
                             Số ngày nghỉ phép tối đa:<strong> {{$acc->num_max}}</strong><br>
                             Số ngày đã làm: <strong>{{$work}}</strong><br>
 
                             </address>
                             <div >
-                                    <a class="btn btn-danger" href="{{asset('admin/salary')."/".$acc->id}}" style="margin-left:50px" >Xem chi tiết lương</a>  
-                                    
-                                    
-                                    
+                                    <a class="btn btn-danger" href="{{asset('admin/salary')."/".$acc->id}}" style="margin-left:50px" >Xem chi tiết lương</a>
                             </div>
                             <div class="col-lg-offset-2">
                                     @if($countCheck>0)
@@ -63,7 +60,7 @@
                                     <!-- Modal -->
                                 <div id="myModal{{$acc->id}}" class="modal fade" role="dialog">
                                             <div class="modal-dialog">
-                                        
+
                                             <!-- Modal content-->
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -86,7 +83,7 @@
                                                                 <tbody>
                                                                     @foreach($check as $ch)
                                                                   <tr>
-                                                                    
+
                                                                   <td>{{$num++}}</td>
                                                                     <td>{{$acc->name}}</td>
                                                                     <td>{{$ch->date_start}}</td>
@@ -96,7 +93,7 @@
                                                                     <td>
                                                                         @if($ch->status == 0)
                                                                         <button onclick='checkPermiss1(this)' value="{{$ch->id}}" id="accept1{{$ch->id}}" class="btn btn-sm btn-danger">Chưa xác nhận</button>
-                                                                        @else 
+                                                                        @else
                                                                         <button onclick='checkPermiss1(this)' value="{{$ch->id}}" id="accept1{{$ch->id}}" class="btn btn-info btn-sm" >Đã Duyệt</button>
                                                                         @endif
                                                                     </td>
@@ -109,20 +106,20 @@
                                                 <button type="button" onclick='window.location.reload(false)' class="btn btn-default" data-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
-                                        
+
                                             </div>
                                     </div>
-                                    
+
                                     @endif
                             </div>
-    
+
                         </a>
-    
+
                     </div>
-                    
+
         </div>
         <div class="col-lg-9">
-                
+
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -133,14 +130,14 @@
                                 <th>Trạng thái </th>
                                 <th>Công</th>
                                 <th>Phép</th>
-                                <th>Điểm danh </th> 
+                                <th>Điểm danh </th>
                             </tr>
                             </thead>
-                            <tbody>   
+                            <tbody>
                                     <?php $num = 1; ?>
                                     @foreach ($contract as $item)
                                     <?php $id_contract = $item->id_contract ?>
-                                <tr>     
+                                <tr>
                                     <td>{{$num++}}</td>
                                     {{-- Kiểm tra lấy ngày làm việc theo hợp đồng --}}
                                     <td>{{$start1}}</td>
@@ -148,7 +145,7 @@
                                        if((strtotime($end) - strtotime($start1))/ (60 * 60 * 24)>=0 || $end == null)
                                        {
                                            $start1 = Carbon\Carbon::parse($start1)->addDay();
-                                           $start1 = Carbon\Carbon::parse($start1)->format('Y-m-d');    
+                                           $start1 = Carbon\Carbon::parse($start1)->format('Y-m-d');
                                     }
                                     ?>
                                     <td>{{$item->day}}</td>
@@ -175,28 +172,28 @@
                                         if($item->status == 1 && $item->permission == 0 || $item->status == 1 && $item->permission == 1)
                                         echo '1';
                                         else echo'0';
-                                    ?></td>                           
+                                    ?></td>
                                     <td>
                                         <?php
                                           if($item->status == 1 && $item->permission == 0)
                                           echo '';
                                           else if($item->status == 1 && $item->permission == 1 || $item->status == 0 && $item->permission == 1)
                                           echo 'Có phép';
-                                          else 
-                                          echo 'Không phép';   
+                                          else
+                                          echo 'Không phép';
                                         ?>
-                                    </td> 
+                                    </td>
                                     <td >
                                             <div class="checkbox checkbox-success" style="margin-top: 0px;" >
-                                            <input id="{{$item->id}}" type="checkbox" onclick="checkonclick(this)" 
+                                            <input id="{{$item->id}}" type="checkbox" onclick="checkonclick(this)"
                                             @php
                                                 if($item->status == 1 && $item->permission == 0 || $item->status == 1 && $item->permission == 1)
                                                 echo 'checked';
                                             @endphp
                                             >
                                                     <label for="checkbox3"> </label>
-                                            </div>                             
-                                    </td>   
+                                            </div>
+                                    </td>
                                 </tr>
                             @endforeach
                             {{-- Không có ngày kết thúc --}}
@@ -213,11 +210,11 @@
                                              <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{$start1}}" type="checkbox">
                                                     <label for="checkbox3"> </label>
                                             </div>
-                                    </td>  
+                                    </td>
                             </tr>
                             @endif
                             {{-- Có ngày kết thúc --}}
-                             @if((strtotime($end) - strtotime($start1))/ (60 * 60 * 24)>=0)            
+                             @if((strtotime($end) - strtotime($start1))/ (60 * 60 * 24)>=0)
                                     <tr>
                                     <td id='num'>{{$num++}}</td>
                                     <td>{{$start1}}</td>
@@ -230,7 +227,7 @@
                                             <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{$start1}}" type="checkbox">
                                                     <label for="checkbox3"> </label>
                                             </div>
-                                    </td>  
+                                    </td>
                                 </tr>
                                 @endif
                             </tbody>

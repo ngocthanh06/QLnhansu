@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Ajax;
+use App\Models\salary;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -33,7 +34,7 @@ class ajaxController extends Controller
         $contract->checkContract($id);
         //Láy thời gian hiện tại
         $now = Carbon::now()->toDateString();
-        //Kiểm tra thời hạn 
+        //Kiểm tra thời hạn
         if($contract->date_end != null)
         $day = (strtotime($contract->date_end) - strtotime($now))/(60 * 60 * 24);
         else
@@ -54,7 +55,7 @@ class ajaxController extends Controller
     }
     //Kiểm tra ngày bắt đầu đơn xin phép có bị trùng không
     public function checkDateStart($id,$date_start,$date_end){
-        //Tìm kiếm đơn xin phép theo theo id 
+        //Tìm kiếm đơn xin phép theo theo id
         $permission = DB::table('permission')->where('id_contract',$id)->where('status',0)->get();
         //Lấy được ngày nhỏ nhất trong danh sách đơn xin phép
         // dd($permission);
@@ -67,7 +68,7 @@ class ajaxController extends Controller
            //Ngày kết thúc
            $day_end = Carbon::Parse($date_end)->between($start,$end);
            if($day_start==true || $day_end == true)
-           return 0;        
+           return 0;
         }
         return 1;
     }
@@ -75,7 +76,7 @@ class ajaxController extends Controller
     public function getcontract($id){
         //Lấy ngày bắt đầu, kết thúc, phép tối đa trong bảng contract
         $loai = contract::find($id);
-       
+
         //Số ngày công theo thông tin
         $day_attendance = $loai->getPermi;
         //Tính tổng ngày làm trong hợp đồng từ ngày bắt đầu đến kết thúc
@@ -93,16 +94,16 @@ class ajaxController extends Controller
         //Chỉnh sửa lại tất cả ngày công và ngày làm việc
         // numwork là ngày làm việc trên hợp đồng
         // chưa có ngày làm việc cố định
-        
 
- 
+
+
             echo "<h4> Ngày bắt đầu: ".$loai->date_start."</h4>";
             echo "<h4> Ngày kết thúc: ".$loai->date_end."</h4>";
             echo "<h4> Hiệu lực: ".$active."</h4>";
             echo "<h4> Số ngày còn lại: ".$pre." ngày </h4>";
             echo "<h4> Số ngày phép tối đa: ".$loai->num_max." phép</h4>";
-            
-       
+
+
     }
     //Lấy hợp đồng
     public function gethopdong($idhopdong){
@@ -111,14 +112,14 @@ class ajaxController extends Controller
         //tiingr số công làm được
         $day_attendance = $loai->getPermi;
         //Ngày nghỉ có phép
-        $sum_per = Count($loai->getAtt); 
+        $sum_per = Count($loai->getAtt);
         //Ngày nghỉ không phép
         $sum_mis = Count($loai->getAttend);
         //Tổng số ngày nghỉ
         $sum_permiss = count($loai->get_pre_pre);
         //Số ngày phép còn lại
-        $pre_pre = $loai->num_max - $sum_permiss; 
-        
+        $pre_pre = $loai->num_max - $sum_permiss;
+
         // $day_work = $loai->getAttend;
         echo "<h4> Số ngày công: ".$day_attendance->num_attendance."</h4>";
         echo "<h4> Số ngày nghỉ: ".$sum_permiss."</h4>";
@@ -140,16 +141,16 @@ class ajaxController extends Controller
         //Lấy ngày làm việc kết thúc sớm nhất của hợp đồng
         $getcontract = $data->checkContract($id);
         //Kiểm tra số ngày kết thúc hợp đồng có còn không
-        //Bằng $getcontract=1 nghĩa là ngày kết thúc null->hợp đồng chưa kết thúc 
+        //Bằng $getcontract=1 nghĩa là ngày kết thúc null->hợp đồng chưa kết thúc
         if($getcontract != "" || $getcontract==1)
             echo 1;
         else
             echo Carbon::now()->toDateString();
-       
+
     }
     //Post AddAttend
     public function CreateAddAttend($id,$day){
-          
+
         $contract = contract::find($id);
         // dd($contract);
         //Lấy thời gian kết thúc
@@ -159,7 +160,7 @@ class ajaxController extends Controller
         //So sánh thời gian hiện tại và thời gian dự kiến
         $checked = $this->cal2Day($day,$now);
 
-        
+
         //kiểm tra
         //Chuyển đổi định dạng
          $day1 = Carbon::parse($day);
@@ -183,7 +184,7 @@ class ajaxController extends Controller
                 if($ch > 0)
                 {
                     $atten = new attendance;
-                    $atten['day'] = $day1; 
+                    $atten['day'] = $day1;
                     $atten['status'] = 1;
                     $atten['permission'] = 0;
                     $atten['id_contract'] = $id;
@@ -191,25 +192,51 @@ class ajaxController extends Controller
                 }
                 $day1->addDay();
 
-            } 
+            }
         }
-    
-        else 
-        return $re;       
+
+        else
+        return $re;
     }
     public function EditAddAttend($id){
-
+        //Truy vấn thông tin của attend theo id
         $atten = attendance::find($id);
-        
+        //lấy tất cả salary
+        $salary  = salary::all();
+        //Chuyển đổi tháng của atten
+        $monthAtt = Carbon::parse($atten->day)->month;
         //Phép và công đã được duyệt thì không được thay đổi
         if($atten['status'] == 0 && $atten['permission'] == 1 ||$atten['status'] == 0 && $atten['permission'] == 0 || $atten['status'] == 1 && $atten['permission'] ==0 )
         {
-            if($atten['status'] == 0)
-            $atten['status'] = 1;
-            else 
-            $atten['status'] = 0;
-            $atten->update();     
-        }    
+            if($atten['status'] == 0) {
+                $atten['status'] = 1;
+                foreach($salary as $sa)
+                {
+                    //Chuyển đổi tháng của salary
+                    $monthRe = Carbon::parse($sa->reviced_date)->month;
+                    //Check ngày công có nằm trong tháng nào của salary
+                    if( $monthAtt == $monthRe )
+                    {
+                        DB::table('salary')->where('id_attent',$sa->id_attent)->where('id',$sa->id)->update(['num_attendance'=> $sa->num_attendance + 1]);
+                    }
+                }
+            }
+            else {
+                $atten['status'] = 0;
+                foreach($salary as $sa)
+                {
+
+                    //Chuyển đổi tháng của salary
+                    $monthRe = Carbon::parse($sa->reviced_date)->month;
+                    //Check ngày công có nằm trong tháng nào của salary
+                    if( $monthAtt == $monthRe )
+                    {
+                            DB::table('salary')->where('id_attent',$sa->id_attent)->where('id',$sa->id)->update(['num_attendance'=> $sa->num_attendance - 1]);
+                    }
+                }
+            }
+            $atten->update();
+        }
     }
     //Show Contract and attend
     public function ShowAttendContr($id){
@@ -318,7 +345,7 @@ class ajaxController extends Controller
         else
         //Kiểm tra ngày bắt đầu có vượt qua ngày kết thúc không
         $day_st = (strtotime($day_e) - strtotime($request->date_start))/ (60 * 60 * 24);
-        
+
 
         $permi = new permission;
         $permi['date_start'] = date("Y-m-d",strtotime($request->date_start));
@@ -327,7 +354,7 @@ class ajaxController extends Controller
         $permi['num_date_end'] = (strtotime($request->date_end) - strtotime($request->date_start))/ (60 * 60 * 24)+1;
         $permi['id_contract'] = $request->id_contract;
         $permi['status'] = 0;
-        
+
         //Lấy tất cả ngày bắt đầu trong per để kiểm tra dữ liệu ngày bắt đầu nghỉ đã tồn tại chưa
         $permission = $this->checkDateStart($request->id_contract,$permi['date_start'],$permi['date_end']);
         // dd($permission);
@@ -355,7 +382,7 @@ class ajaxController extends Controller
 
             //Tổng số ngày nghỉ không quá 3
             else if($permi['num_date_end'] > 3)
-        
+
                 return redirect()->intended('admin/getPermission')->with('error','Số ngày nghỉ không được quá 3 ngày');
             else{
                 $permi->save();
@@ -398,15 +425,15 @@ class ajaxController extends Controller
                    <td>";
                   echo $co->status == 1? 'Được duyệt':'Chưa được duyệt';
                   echo "</td>";
-                  echo"<td><button onclick='cancel(this)'"; 
-                  echo $co->status == 1? 'disabled':''; 
+                  echo"<td><button onclick='cancel(this)'";
+                  echo $co->status == 1? 'disabled':'';
                   echo "  id='$co->id' class='btn btn-success'>Hủy</button></td>";
                    }
             echo" </table>
             <div style='text-align:right'>
                    <button onclick='showPer(this)'";
                  if($acc > 0 && $count < 20) echo "";
-                    else echo "disabled";   
+                    else echo "disabled";
                    echo" id='".$id."' class='btn btn-success'>Đơn xin phép</button>
             </div>
            </div>
@@ -439,25 +466,25 @@ class ajaxController extends Controller
         // dd($att);
         $end = Carbon::parse($permi['date_end']);
         //So sánh với lại ngày công có trong hợp đồng
-        
+
         foreach($att as $at)
         {
             $day = Carbon::parse($at->day)->between($start,$end);
             if($day == true){
             if($permi['status'] == 0)
             DB::table('attendance')->where('id',$at->id)->update(['permission'=>'0','status'=>'0']);
-            else 
+            else
             DB::table('attendance')->where('id',$at->id)->update(['permission'=>'1','status'=>'1']);
             }
         }
         return $permi['status'];
-        
-        
+
+
     }
 
     //Thống kê công theo tháng
     public function getPerMonth(){
-         
+
     }
 
     //Lấy lương theo tháng
@@ -470,7 +497,7 @@ class ajaxController extends Controller
         $num = 1;
         $total = 0;
         $sum = 0;
-        
+
         foreach($data as $lt){
             echo"
             <tr>
@@ -488,10 +515,13 @@ class ajaxController extends Controller
             <td>".number_format($lt->sum_position - $lt->sum_position*5/100 )." </td>
             <td>".$lt->reviced_date." </td>
             </tr> ";
-           
+
         }
-            
-           
-        
+
+
+
     }
+
+
+
 }
