@@ -28,59 +28,59 @@ Route::group(['namespace'=>'Admin'],function(){
 
 
     Route::group(['prefix' => 'admin','middleware'=>'checkLogout'], function () {
-        Route::get('home','HomeController@gethome');
+        Route::get('home','HomeController@gethome')->middleware('checkRole');
         Route::post('home','HomeController@posthome');
         //Danh sách nhân viên
-        Route::get('user','UserManager@getUser');
+        Route::get('user','UserManager@getUser')->middleware('checkRoleEm');
         //Get add nhân viên
-        Route::get('addUser','UserManager@getAddUser');
+        Route::get('addUser','UserManager@getAddUser')->middleware('checkRoleEm');
         //Post add Nhân viên
         Route::post('addUser','UserManager@postAddUser');
         //get edit nhân viên
-        Route::get('editUser/{id}','UserManager@getEditUser');
+        Route::get('editUser/{id}','UserManager@getEditUser')->middleware('checkRoleEm');
         //Post Edit Nhân viên
         Route::post('editUser/{id}','UserManager@postEditUser');
         //Delete Nhân viên
-        Route::get('deleteUser/{id}','UserManager@getDeleteUser');
+        Route::get('deleteUser/{id}','UserManager@getDeleteUser')->middleware('checkRoleEm');
 
         //
         //Loại hợp đồng
-        Route::get('type_contract','TypeContractManager@getTypeContract');
+        Route::get('type_contract','TypeContractManager@getTypeContract')->middleware('checkRoleEm');
 
 
 
         //Hợp đồng
         //Lấy danh sách loại hợp đồng
-        Route::get('contract','ContractManager@getContract');
+        Route::get('contract','ContractManager@getContract')->middleware('checkRoleEm');
         //get THêm hợp đồng
-        Route::get('AddContract','ContractManager@getAddContract');
+        Route::get('AddContract','ContractManager@getAddContract')->middleware('checkRoleEm');
         //Post Thêm hợp đồng
         Route::post('AddContract','ContractManager@postAddContract');
         //Get edit hợp đồng
-        Route::get('EditContract/{id}','ContractManager@getEditContract');
+        Route::get('EditContract/{id}','ContractManager@getEditContract')->middleware('checkRoleEm');
         //Post edit hợp đồng
         Route::post('EditContract/{id}','ContractManager@postEditContract');
         //Delete hợp đồng
-        Route::get('DeleteContract/{id}','ContractManager@DeleteContract');
+        Route::get('DeleteContract/{id}','ContractManager@DeleteContract')->middleware('checkRoleEm');
         Route::post('DeleteContract/{id}','ContractManager@PostDeleteContract');
 
         //Chấm công
         //
-        Route::get('getAttendance/{id}','AttendanceManager@getAttendance');
+        Route::get('getAttendance/{id}','AttendanceManager@getAttendance')->middleware('checkRoleEm');
         //Xin nghỉ phép
-        Route::get('getPermission','PermissionManager@getPermission');
+        Route::get('getPermission','PermissionManager@getPermission')->middleware('checkRole');
 
 
         //Lương
         //Get lương
-        Route::get('salary/{id}','SalaryManager@getSalary');
+        Route::get('salary/{id}','SalaryManager@getSalary')->middleware('checkRoleEm');
         //Post Lương
         Route::post('salary/{id}','SalaryManager@postSalary');
         //Lấy lương theo tháng mới
         Route::post('getMonth','SalaryManager@PostMonth');
 
         //Bảng lương
-        Route::get('GetAtendance','AttendanceManager@GetAtendance');
+        Route::get('GetAtendance','AttendanceManager@GetAtendance')->middleware('checkRoleEm');
 
         //Export Excel
         Route::post('Export','HomeController@export');

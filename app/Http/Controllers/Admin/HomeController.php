@@ -51,6 +51,7 @@ class HomeController extends Controller
     //Gọi xuất excel
     public function export(Request $request){
         // dd($request->all());
+
         return Excel::download(new ExcelController($request->month), 'LuongQLNSNV.xlsx');
 
     }

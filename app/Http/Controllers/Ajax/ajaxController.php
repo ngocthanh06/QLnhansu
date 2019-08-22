@@ -471,7 +471,6 @@ class ajaxController extends Controller
         $data = DB::table('account')->join('contract','contract.id_account','account.id')->join('salary','salary.id_attent','contract.id')->join('role','role.id','account.id_role')->get();
         else
         $data = DB::table('account')->join('contract','contract.id_account','account.id')->join('salary','salary.id_attent','contract.id')->join('role','role.id','account.id_role')->whereMonth('reviced_date',$id)->get();
-        // dd($data);
         $num = 1;
         $total = 0;
         $sum = 0;
@@ -493,8 +492,14 @@ class ajaxController extends Controller
             <td>".number_format($lt->sum_position - $lt->sum_position*5/100 )." </td>
             <td>".$lt->reviced_date." </td>
             </tr> ";
+            $sum = $lt->sum_position - $lt->sum_position*5/100;
+            $total = $total + $sum;
 
         }
+        echo "<script>
+                   document.getElementById('total').innerHTML = '".number_format($total)." VND';  
+         </script>";
+//        return $total;
 
 
 

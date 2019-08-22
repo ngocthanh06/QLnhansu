@@ -846,8 +846,9 @@
         $('#month').on('change',function(){
             var id = $(this).val();
             $.get("{{asset('ajax/getMonthSalary')}}" + '/' +id,function(data){
+                console.log(data);
                 $('#showMonth').html(data);
-
+                console.log(data);
             });
         });
 
