@@ -16,7 +16,7 @@ class Permission extends Migration
         //
         Schema::create('Permission', function (Blueprint $table) {
             $table->Increments('id');
-            $table->integer('id_attendance');
+            $table->integer('id_contract');
             $table->date('date_start');
             $table->date('date_end');
             $table->string('reason');//lí do

@@ -13,23 +13,16 @@ class Attendance extends Migration
      */
     public function up()
     {
-        //
-        // Schema::create('timesheets', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->string('name');
-        //     $table->integer('day');
-        //     $table->integer('permission');
-        //     $table->string('num_permission');
-        //     $table->timestamps();
-        // });
+
             Schema::create('attendance', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('id_contract');
+            $table->integer('permission');
             $table->date('day');
             $table->boolean('status');
             $table->timestamps();
          });
-        
+
     }
 
     /**

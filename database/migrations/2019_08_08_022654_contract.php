@@ -17,12 +17,15 @@ class Contract extends Migration
         Schema::create('contract', function (Blueprint $table) {
             $table->Increments('id');
             $table->integer('id_type_contract');
-            $table->string('name');
+            $table->string('name_contract');
             $table->date('date_start');
             $table->date('date_end');
             $table->string('content');
             $table->integer('id_account');
             $table->integer('num_work');
+            $table->integer('num_max');
+            $table->double('coefficients');
+            $table->integer('id_salary');
             $table->timestamps();
         });
     }

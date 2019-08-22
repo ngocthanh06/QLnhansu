@@ -21,10 +21,13 @@ class Account extends Migration
             $table->string('address');
             $table->boolean('sex');
             $table->string('info');
-            $table->string('image');
+//            $table->string('image');
             $table->string('username');
             $table->string('password');
             $table->string('passport');
+            $table->string('num_account');
+            $table->string('BHXH');
+
             $table->timestamps();
         });
     }

@@ -16,9 +16,7 @@ class TypeContract extends Migration
         //
         Schema::create('type_contract', function (Blueprint $table) {
             $table->Increments('id');
-            $table->string('name');
-            $table->integer('num_max');
-            $table->integer('coefficients');//Hệ số lương
+            $table->string('name_type');
             $table->timestamps();
         });
     }

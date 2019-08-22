@@ -28,17 +28,18 @@ class Salary extends Migration
         //     $table->date('reviced_date');
         //     $table->timestamps();
         // });
-        
+
 
         Schema::create('Salary', function (Blueprint $table) {
             $table->Increments('id');
-            $table->integer('id_attendance');
             $table->integer('num_attendance');
             $table->string('position');
             $table->string('reward');
             $table->string('allowance');
             $table->integer('sum_position');//ngày phép
             $table->date('reviced_date');
+            $table->integer('num_done');
+            $table->integer('id_attent');
             $table->timestamps();
         });
     }
