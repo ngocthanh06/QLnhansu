@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\attendance;
+use App\Models\permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -69,6 +71,10 @@ class AttendanceManager extends Controller
        $data['permi'] = count(DB::table('permission')->where('id_contract',$id)->get());
        //Đếm số lượng đơn xin phép được chấp thuận
        $data['countPer'] = count(DB::table('permission')->where('id_contract',$id)->where('status','1')->get());
+        //Lấy số ngày phép
+        $data['per'] = count(permission::where('id_contract',$data['acc']->id)->where('status',1)->get());
+        //Vắng không phép
+        $data['miss'] = count(attendance::where('id_contract',$data['acc']->id)->where('status',0)->where('status',0)->get());
         // dd($data);
         return view('Admin/Attendance/main',$data);
    }

@@ -27,15 +27,9 @@
                                 else echo $acc->date_end
                                 ?>
                              </strong><br>
-                             Số ngày làm việc trên hợp đồng:<strong>
-                                 <?php
-                                 if($acc->date_end == null)
-                                 echo 'Không xác định';
-                                 else
-                                 echo $acc->num_work;
-                                    ?></strong><br>
-                             Hệ số lương:<strong> {{$acc->coefficients}}</strong><br>
-                             Số ngày nghỉ phép tối đa:<strong> {{$acc->num_max}}</strong><br>
+                              Vắng không phép:<strong> {{$miss}}</strong><br>
+                              Vắng có phép:<strong> {{$per}}</strong><br>
+                             Số ngày phép còn lại:<strong> {{12 - $per}}</strong><br>
                              Số ngày đã làm: <strong>{{$att}}</strong><br>
                           </address>
                           <div >

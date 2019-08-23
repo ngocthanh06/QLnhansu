@@ -24,8 +24,14 @@ class HomeController extends Controller
 
     //Trang chủ
     public function gethome(){
+
         //Get quyền
         $data['role'] = $this->getrole();
+
+        $data['ro'] = count(contract::where('id_account',Auth::user()->id)->whereNull('date_end')->get());
+        //Nếu người dùng chưa có tài khoảng hợp đồng
+        if($data['ro'] == 0)
+            return redirect()->route('categoryOrder');
         // Lấy tháng hiện tại
         $data['month'] = Carbon::now()->month;
         //Lấy hợp đồng còn hạn sử dụng trong danh sách hợp đồng của nhân viên có ngày kết thúc là null

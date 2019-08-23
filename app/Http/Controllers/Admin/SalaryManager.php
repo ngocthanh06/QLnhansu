@@ -13,6 +13,7 @@ use App\Http\Requests\AddSalaryRequest;
 use App;
 use DB;
 use Carbon\Carbon;
+use App\Models\permission;
 use Illuminate\Support\Facades\Hash;
 
 class SalaryManager extends Controller
@@ -96,6 +97,10 @@ class SalaryManager extends Controller
         $data['num'] = 1;
         $data['now'] = $this->gettimenow();
         $data['id'] = $id;
+        //Lấy số ngày phép
+        $data['per'] = count(permission::where('id_contract',$data['acc']->id)->where('status',1)->get());
+        //Vắng không phép
+        $data['miss'] = count(attendance::where('id_contract',$data['acc']->id)->where('status',0)->where('status',0)->get());
         return view('Admin/Salary/main', $data);
     }
 

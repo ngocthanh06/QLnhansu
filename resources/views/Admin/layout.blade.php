@@ -819,7 +819,11 @@
                      @foreach($get as $va)
                     {
                         id: '{{$va->id}}',
+                        @if($va->status == 1 && $va->permission == 0)
                         title: 'Đi làm',
+                        @elseif($va->status == 1 && $va->permission == 1)
+                        title :'Vắng có phép',
+                        @endif
                         start: new Date('{{$va->day}}'),
                         allDay: false,
                     },

@@ -23,7 +23,7 @@ Route::group(['namespace'=>'Admin'],function(){
         Route::post('/','LoginController@postlogin');
     });
     Route::group(['prefix' => 'logout'], function () {
-        Route::get('/','LoginController@getLogout');
+        Route::get('/','LoginController@getLogout')->name('categoryOrder');;
     });
 
 
