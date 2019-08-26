@@ -17,7 +17,8 @@ class account extends Model
         return $this->hasOne('App\Models\role','id','id_role');
     }
 
-   
+
+
 
 
 }

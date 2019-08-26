@@ -23,6 +23,11 @@ class SalaryManager extends Controller
         //Get quyền
         return account::find(Auth::user()->id_role)->getRole;
     }
+    //Tính khoảng cách của 2 ngày
+    public function cal2Day($date_start,$date_end){
+        $data = (strtotime($date_end) - strtotime($date_start))/ (60 * 60 * 24);
+        return $data;
+    }
 
     //Lấy thời gian
     protected function gettimenow()
@@ -67,6 +72,12 @@ class SalaryManager extends Controller
         return preg_replace("/([^0-9\\.])/i", "", $num);
     }
 
+    //Attent work in month
+    protected function getMonthWork($id)
+    {
+        return DB::table('attendance')->where('id_contract', $id)->where('status', '1')->where('permission', '0')->whereMonth('day',Carbon::parse(Carbon::now())->month)->orWhere('status', '1')->where('permission', '1')->where('id_contract', $id)->whereMonth('day',Carbon::parse(Carbon::now())->month)->get();
+    }
+
     //Get lương
     public function getSalary($id)
     {
@@ -80,12 +91,11 @@ class SalaryManager extends Controller
         $data['now'] = $this->gettimenow();
         //Lấy thông tin của attend
         $data['info'] = $this->getAtt($id);
-        //Lấy số ngày công đã làm
+        //Lấy số ngày công đã làm trong tháng
         $data['att'] = count($this->getAtt($id));
         //Lấy số ngày công đã thanh toán
         $sumpay = $this->getPay($id);
         $data['pay'] = 0;
-
         //Lấy số ngày công đã thanh toán
         foreach($sumpay as $sum)
         {
@@ -107,9 +117,23 @@ class SalaryManager extends Controller
     //Post lương
     public function postSalary(AddSalaryRequest $request, $id)
     {
-        //Kiểm tra thanh toán đã tồn tại chưa
         $salary = salary::find($id);
+
+        //Kiểm tra thanh toán đã tồn tại chưa
+
         if ($salary == null) {
+            $timeSa = Carbon::parse($request->date_now)->toDateString();
+            //Kiểm tra số ngày công trong hợp đồng
+            $attent = attendance::where('id_contract',$id)->get();
+
+            foreach($attent as $att)
+            {
+                $time = Carbon::parse($att->day)->toDateString();
+            }
+            if($this->cal2Day($time,$timeSa) < 0)
+            {
+                return back()->withInput()->with('error','Ngày thanh toán không được nhỏ hơn ngày công hiện có');
+            }
             $salary = new salary;
             $salary['num_attendance'] = $request->num_attendance;
             $salary['position'] = $request->position;
@@ -139,6 +163,7 @@ class SalaryManager extends Controller
     //Tính lương theo tháng mới
     public function PostMonth(Request $request)
     {
+
         $request->validate([
             'num_attendance' => 'not_in:0',
             ],
@@ -160,5 +185,15 @@ class SalaryManager extends Controller
             $salary->save();
             return back()->withInput()->with('success','Thêm thành công');
         }
+    }
+
+    //Salary Employs
+    public  function SalaryEmploys(){
+        //get role user
+        $data['role'] = $this->getrole();
+        //get value salary when join account through id_contract
+        $data['salary'] = DB::table('salary')->join('contract','salary.id_attent','contract.id')->where('contract.id_account',Auth::user()->id)->simplePaginate(5);
+
+        return view('Admin/salary/salaryEmploys',$data);
     }
 }

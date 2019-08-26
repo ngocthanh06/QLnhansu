@@ -5,7 +5,7 @@
 <div class="col-lg-12">
         <div class="ibox float-e-margins">
            <div class="ibox-title">
-            <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Lương nhân viên '. $acc->name.'</h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/getAttendance/".$acc->id).'"><i><small>Công</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/EditContract/".$acc->id).'"><i><small>Sửa hợp đồng</small></i></a></h5><h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$acc->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}
+            <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5>  <h5>&nbsp; / &nbsp;</h5> <h5><a href="{{asset("admin/EditContract/".$acc->id)}}"><i><small>Sửa hợp đồng</small></i></a></h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="{{asset("admin/getAttendance/".$acc->id)}}"><i><small>Công</small></i></a></h5> <h5>&nbsp;/&nbsp;</h5>  {!! $open == 'contract' ? '<h5></i>Lương nhân viên '. $acc->name.'</i></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$acc->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}
            </div>
            <div class="ibox-content">
               <div class="row">
@@ -151,12 +151,13 @@
                                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                             <h4 class="modal-title">Bảng tính lương của nhân viên</h4>
                                                         </div>
+{{--                                                        TÍnh lương theo tháng mới nhất--}}
                                                         <div class="modal-body">
                                                             <form action="{{asset('admin/getMonth')}}" method="POST" >
                                                                 {{ csrf_field() }}
                                                                 <div class="form-group">
                                                                     <label for="usr">Số ngày công:</label>
-                                                                    <<input type="text" id='num_attendance1' name="num_attendance" value="{{$att-$pay}}" readonly placeholder="Số ngày công của nhân viên" class="form-control">
+                                                                    <input type="text" id='num_attendance1' name="num_attendance" value="{{$att-$pay}}" readonly placeholder="Số ngày công của nhân viên" class="form-control">
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="usr">Số công thanh toán:</label>
@@ -203,11 +204,10 @@
                                     @endif
                                 </table>
                             @else
-                            <form class="form-horizontal" method="POST"  >
+                            <form class="form-horizontal" method="POST">
                                     {{ csrf_field() }}
                                     <h4> Bảng tính lương của nhân viên</h4>
-                                    <div class="form-group"><label class="col-lg-2 control-label">Số ngày công</label>
-
+                                    <div class="form-group"><label class="col-lg-2 control-label">Số ngày công </label>
                                     <div class="col-lg-10">
                                         <input type="text" id='num_attendance' name="num_attendance" value="{{$att}}" readonly placeholder="Số ngày công của nhân viên" class="form-control">
                                         </div>
@@ -227,7 +227,7 @@
                                     <div class="form-group"><label class="col-lg-2 control-label">Lương theo ngày</label>
 
                                         <div class="col-lg-10">
-                                            <input id="salary_day" required name="salary_date" step="100000" type="number" placeholder="Lương của công nhân" class="form-control">
+                                            <input id="salary_day" required name="salary_date"  type="number" placeholder="Lương của công nhân" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-lg-2 control-label">Thưởng</label>

@@ -69,7 +69,8 @@ Route::group(['namespace'=>'Admin'],function(){
         Route::get('getAttendance/{id}','AttendanceManager@getAttendance')->middleware('checkRoleEm');
         //Xin nghỉ phép
         Route::get('getPermission','PermissionManager@getPermission')->middleware('checkRole');
-
+        //Get time attendance
+        Route::post('getAttendance/{id}','AttendanceManager@GetTimeAttend');
 
         //Lương
         //Get lương
@@ -78,12 +79,16 @@ Route::group(['namespace'=>'Admin'],function(){
         Route::post('salary/{id}','SalaryManager@postSalary');
         //Lấy lương theo tháng mới
         Route::post('getMonth','SalaryManager@PostMonth');
+        //Salary Employs
+        Route::get('SalaryEmploys','SalaryManager@SalaryEmploys');
 
         //Bảng lương
         Route::get('GetAtendance','AttendanceManager@GetAtendance')->middleware('checkRoleEm');
 
+
         //Export Excel
         Route::post('Export','HomeController@export');
+
 
     });
 });
@@ -117,12 +122,15 @@ Route::group(['namespace' =>'Ajax'],function(){
         Route::get('getPerMonth','AjaxController@getPerMonth');
 
         //lấy lương theo tháng
-        Route::get('getMonthSalary/{id}','AjaxController@getMonthSalary');
+        Route::get('getMonthSalary/{id}/{id1}','AjaxController@getMonthSalary');
 
         Route::get('getSalaryMonth','AjaxController@getSalaryMonth');
 
+        //Get value month Attent with Employ
+        Route::get('GetMonthAttentConTract/{idMonth}/{id}','AjaxController@GetMonthAttentConTract');
 
-
+        //Get info UserAccept Salary
+        Route::get('GetInfoAccept/{id}/{year}','AjaxController@GetInfoAccept');
     });
 
 

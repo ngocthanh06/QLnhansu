@@ -40,6 +40,7 @@ class Salary extends Migration
             $table->date('reviced_date');
             $table->integer('num_done');
             $table->integer('id_attent');
+            $table->integer('status');
             $table->timestamps();
         });
     }

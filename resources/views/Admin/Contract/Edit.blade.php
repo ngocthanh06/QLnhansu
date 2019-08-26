@@ -2,7 +2,7 @@
 @extends('Admin.layout')
 @section('content')
 <div class="ibox-title">
-   <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Sửa hợp đồng </h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/salary/".$contract->id).'"><i><small>Lương</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/getAttendance/".$contract->id).'"><i><small>Công</small></i></a></h5> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$contract->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!} 
+   <h5><a href="{{asset('admin/contract')}}"> <i> <small> Danh sách hợp đồng </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<i><h5>Sửa hợp đồng </h5></i> <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/getAttendance/".$contract->id).'"><i><small>Công</small></i></a></h5> <h5>&nbsp; /&nbsp; </h5> <h5><a href="'.asset("admin/salary/".$contract->id).'"><i><small>Lương</small></i></a></h5>  <h5>&nbsp; / &nbsp;</h5> <h5><a href="'.asset("admin/DeleteContract/".$contract->id).'"><i><small>Hủy hợp đồng</small></i></a></h5>':''!!}
      </div>
      <div class="ibox-content">
         <form method="post" class="form-horizontal">
@@ -13,9 +13,9 @@
             <select class="form-control m-b" id="id_type_contract" name="id_type_contract">
                  @foreach($type_contract as $type)
                     <option {{$contract->id_type_contract == $type->id ? 'selected':''}} value="{{$type->id}}">{{$type->name_type}}</option>
-                @endforeach         
+                @endforeach
             </select>
-              
+
             </div>
            </div>
            <div class="hr-line-dashed"></div>
@@ -25,7 +25,7 @@
                 <select class="form-control m-b" id='account' name="id_account">
                         @foreach($user as $type)
                            <option {{$contract->id_account == $type->id ? 'selected':''}} value="{{$type->id}}">{{$type->name}}</option>
-                       @endforeach         
+                       @endforeach
                    </select>
             </div>
            </div>
@@ -46,12 +46,12 @@
            <div class="form-group">
               <label class="col-sm-2 control-label">Ngày bắt đầu</label>
            <div class="col-sm-10" id="data_2"><div class="input-group date" >
-           <?php 
+           <?php
                  $time_start = Carbon\Carbon::parse($contract->date_start)->toDateString();
             ?>
            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" required name="date_now" class="form-control" value="{{Carbon\Carbon::parse($time_start)->format('m/d/Y')}}">
             </div></div>
-           </div>              
+           </div>
 
            <div class="hr-line-dashed"></div>
            <div class="form-group">
@@ -76,7 +76,7 @@
               <textarea name="content" id="editor" cols="30" rows="10" placeholder="Nhập nội dung thông tin thêm">{{$contract->content}}</textarea>
               </div>
            </div>
-          
+
      <div class="hr-line-dashed"></div>
      <div class="form-group" style="text-align:right">
      <div class="col-sm-9 col-sm-offset-2">

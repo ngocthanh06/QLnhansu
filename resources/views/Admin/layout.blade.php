@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <title>Quản lý nhân sự | Dashboard</title>
     <base href="{{asset('qlns')}}/">
+    <!-- FooTable -->
+    <link href="css/plugins/footable/footable.core.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-
+    <!-- FooTable -->
+    <link href="css/plugins/footable/footable.core.css" rel="stylesheet">
     {{-- DataTable --}}
     <link rel="stylesheet" type="text/css" href="{{asset('qlns/DataTables/datatables.min.css')}}"/>
     {{-- Lịch --}}
     <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
-
     <link href="css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
     <link href="css/plugins/fullcalendar/fullcalendar.print.css" rel='stylesheet' media='print'>
-
-
     <!-- Toastr style -->
     <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
-
     <!-- Gritter -->
     <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
-
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
     <link href="css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
-
     <script src="https://cdn.ckeditor.com/ckeditor5/12.3.1/classic/ckeditor.js"></script>
+    <link type="text/css" href="{{asset('qlns/timepicker/css/bootstrap.min.css')}}" />
+    <link type="text/css" href="{{asset('qlns/timepicker/css/bootstrap-timepicker.min.css')}}" />
+    <script type="text/javascript" src="{{asset('qlns/js/jquery-2.1.1.js')}}"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{asset('qlns/timepicker/js/bootstrap-timepicker.min.js')}}"></script>
+
+
+
 </head>
 
 <body>
@@ -82,7 +83,9 @@
                     <li class="<?php echo isset($open) && $open == 'permission' ?'active':'' ?>">
                     <a href="{{asset('admin/getPermission')}}"><i class="fa fa-pie-chart"></i> <span class="nav-label">Xin nghỉ phép</span>  </a>
                     </li>
-
+                        <li class="<?php echo isset($open) && $open == 'salaryEm' ?'active':'' ?>">
+                            <a href="{{asset('admin/SalaryEmploys')}}"><i class="fa fa-pie-chart"></i> <span class="nav-label">Lương nhân viên</span>  </a>
+                        </li>
                     @endif
                 </ul>
 
@@ -706,6 +709,8 @@
     <!-- Mainly scripts -->
     <script src="js/jquery-2.1.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <!-- FooTable -->
+    <script src="js/plugins/footable/footable.all.min.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
@@ -760,8 +765,14 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     {{-- DataTable --}}
     <script type="text/javascript" src="{{asset('qlns/DataTables/datatables.min.js')}}"></script>
+    <!-- FooTable -->
+    <script src="js/plugins/footable/footable.all.min.js"></script>
 
- <script >
+
+
+
+
+    <script >
 
     $(document).ready(function() {
 
@@ -815,17 +826,23 @@
                         $(this).remove();
                     }
                 },
+
                 events: [
                      @foreach($get as $va)
                     {
                         id: '{{$va->id}}',
                         @if($va->status == 1 && $va->permission == 0)
                         title: 'Đi làm',
+                        color: '#5858FA',
+
                         @elseif($va->status == 1 && $va->permission == 1)
                         title :'Vắng có phép',
+                        color:'#FE642E',
+
                         @endif
                         start: new Date('{{$va->day}}'),
                         allDay: false,
+
                     },
                     @endforeach
                 ],
@@ -834,6 +851,15 @@
 
 </script>
     {{-- end --}}
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+            $('.footable2').footable();
+
+        });
+
+    </script>
 
     {{-- xử lý hợp đồng --}}
     <script >
@@ -844,17 +870,35 @@
                 opens: 'right'
             }, function(start, end, label) {});
         });
-    //Lấy hợp đồng
-    $(document).ready(function() {
-        //Select lương theo tháng
-        $('#month').on('change',function(){
-            var id = $(this).val();
-            $.get("{{asset('ajax/getMonthSalary')}}" + '/' +id,function(data){
+
+        function month(e)
+        {
+            $('#monthA').html(e.id);
+            $('#monthB').val(e.id);
+            $('#monthB').val(e.id);
+            $.get("{{asset('ajax/getMonthSalary')}}" + '/' +e.id,function(data){
                 console.log(data);
                 $('#showMonth').html(data);
                 console.log(data);
             });
-        });
+        }
+
+        function acceptSalary(e){
+                $.get("{{asset('ajax/GetInfoAccept')}}"+'/'+ e.id ,function(data){
+                    if(data == 0)
+                    alert('Thay đổi không được phép');
+                    else
+
+                    window.location.reload(false); //load lại trang
+                });
+
+        }
+
+    //Lấy hợp đồng
+    $(document).ready(function() {
+        //Select lương theo tháng
+
+
 
 
 
@@ -999,6 +1043,7 @@
     }
 
 
+
     function checkedAtt(e) {
         $.get("{{asset('ajax/CreateAddAttend')}}" + "/" + e.value + "/" + e.id, function(data) {
             if (data >= 1) {
@@ -1013,6 +1058,8 @@
     function checkonclick(e) {
         if ($("input[type='checkbox']:checked")) {
             $.get("{{asset('ajax/EditAddAttend')}}" + "/" + e.id, function(data) {
+                if(data==1)
+                alert('Không thể chỉnh sửa công khi lương đã được thanh toán');
                 window.location.reload(false); //load lại trang
             });
         } else {

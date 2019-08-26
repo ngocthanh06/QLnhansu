@@ -20,6 +20,8 @@ class Attendance extends Migration
             $table->integer('permission');
             $table->date('day');
             $table->boolean('status');
+            $table->time('checkin');
+            $table->time('checkout');
             $table->timestamps();
          });
 

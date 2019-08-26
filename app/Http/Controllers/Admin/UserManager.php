@@ -35,6 +35,7 @@ class UserManager extends Controller
     //Post Nhân viên
     public function postAddUser(AddUserRequest $request){
         $user = new account;
+        $user['bank'] = $request->bank;
         $user['name'] = $request->name;
         $user['address'] = $request->address;
         $user['username'] = $request->username;
@@ -59,6 +60,7 @@ class UserManager extends Controller
     //Post edit nhân viên
     public function postEditUser(EditUserRequest $request,$id){
         $user = account::find($id);
+        $user['bank'] = $request->bank;
         $user['name'] = $request->name;
         $user['address'] = $request->address;
         $user['username'] = $request->username;
@@ -76,7 +78,7 @@ class UserManager extends Controller
         }
         else
         return redirect()->intended('admin/user')->with('error','Thông tin không thay đổi');
-           
+
     }
     //Delete Nhân viên
     public function getDeleteUser($id){

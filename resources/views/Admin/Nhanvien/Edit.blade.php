@@ -2,7 +2,7 @@
 @extends('Admin.layout')
 @section('content')
 <div class="ibox-title">
-   <h5><a href="{{asset('admin/user')}}"> <i> <small> Danh sách nhân viên </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'account' ? '<h5>Sửa nhân viên</h5>':''!!} 
+   <h5><a href="{{asset('admin/user')}}"> <i> <small> Danh sách nhân viên </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'account' ? '<h5>Sửa nhân viên</h5>':''!!}
      </div>
      <div class="ibox-content">
         <form method="post" class="form-horizontal">
@@ -42,7 +42,14 @@
           <div class="col-sm-10">
               {!! Form::text('num_account', $user->num_account, array('placeholder'=>'Nhập thông tin tài khoản ngân hàng', 'class'=>'form-control')) !!}
           </div>
-      
+                <div class="hr-line-dashed"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Tên ngân hàng</label>
+                <div class="col-sm-10">
+                    {!! Form::text('bank', $user->bank, array('placeholder'=>'Nhập thông tin ngân hàng', 'class'=>'form-control')) !!}
+                </div>
+
             </div>
           <div class="hr-line-dashed"></div>
             <div class="form-group">
@@ -66,14 +73,14 @@
                     <label class="">
                        <div class="iradio_square-green" style="position: relative;">
                        <input type="radio" {{$user->sex == 1 ? 'checked':''}} value="1" name="sex" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
-                       <i></i> Nam 
+                       <i></i> Nam
                     </label>
                  </div>
                  <div class="i-checks">
                     <label class="">
                        <div class="iradio_square-green " style="position: relative;">
                          <input type="radio"  value="2" name="sex" {{$user->sex == 2 ? 'checked':''}} style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
-                       <i></i> Nữ 
+                       <i></i> Nữ
                     </label>
                  </div>
               </div>

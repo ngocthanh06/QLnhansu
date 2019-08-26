@@ -2,13 +2,13 @@
 @extends('Admin.layout')
 @section('content')
 <div class="ibox-title">
-<h5><a href="{{asset('admin/user')}}"> <i> <small> Danh sách nhân viên </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'account' ? '<h5>Thêm nhân viên</h5>':''!!} 
+<h5><a href="{{asset('admin/user')}}"> <i> <small> Danh sách nhân viên </small> </i> </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'account' ? '<h5>Thêm nhân viên</h5>':''!!}
 </div>
 <div class="ibox-content">
    <form method="post" class="form-horizontal">
        {{ csrf_field() }}
       <div class="form-group">
-         
+
          <label class="col-sm-2 control-label">Họ và tên</label>
       <div class="col-sm-10">
             {{ Form::text('name', old('name'), array('required','placeholder'=>'Nhập họ và tên','class'=>'form-control')) }}
@@ -41,7 +41,7 @@
       <div class="col-sm-10">
          {!! Form::text('address', old('address'), array('placeholder'=>'Nhập địa chỉ của nhân viên', 'class'=>'form-control')) !!}
       </div>
-      
+
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
@@ -49,7 +49,13 @@
       <div class="col-sm-10">
          {!! Form::text('num_account', old('num_account'), array('placeholder'=>'Nhập thông tin tài khoản ngân hàng', 'class'=>'form-control')) !!}
       </div>
-      
+          <div class="hr-line-dashed"></div>
+          <div class="form-group">
+              <label class="col-sm-2 control-label">Ngân hàng</label>
+              <div class="col-sm-10">
+                  {!! Form::text('bank', old('bank'), array('placeholder'=>'Nhập thông tin tên ngân hàng', 'class'=>'form-control')) !!}
+              </div>
+
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
@@ -57,7 +63,7 @@
       <div class="col-sm-10">
          {!! Form::text('BHXH', old('BHXH'), array('placeholder'=>'Nhập BHXH của nhân viên', 'class'=>'form-control')) !!}
       </div>
-      
+
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
@@ -75,7 +81,7 @@
                   <div class="iradio_square-green" style="position: relative;">
                   {!! Form::radio('sex', 1, 'checked', array('style'=>'position: absolute; opacity: 0;')) !!}
                   <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
-                  <i></i> Nam 
+                  <i></i> Nam
                </label>
             </div>
             <div class="i-checks">
@@ -83,7 +89,7 @@
                   <div class="iradio_square-green " style="position: relative;">
                   {!! Form::radio('sex', 2, old('sex') == 2 ? 'checked':'', array('style'=>'position: absolute; opacity: 0;')) !!}
                   <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
-                  <i></i> Nữ 
+                  <i></i> Nữ
                </label>
             </div>
          </div>
