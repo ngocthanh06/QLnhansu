@@ -18,7 +18,11 @@
         </tr>
         </thead>
         <tbody >
+
         @foreach($list as $li)
+            @php
+                $numcount = 0;
+            @endphp
             <tr>
             <td> Tháng {{Carbon\Carbon::parse($li->reviced_date)->month}}/{{Carbon\Carbon::parse($li->reviced_date)->year}}</td>
                 @php
@@ -26,27 +30,24 @@
                     $sumMissTax = DB::table('salary')->whereMonth('reviced_date',Carbon\Carbon::parse($li->reviced_date)->month)->whereYear('reviced_date',Carbon\Carbon::parse($li->reviced_date)->year)->sum('sum_position') *5/100;
                     $sumTotal = $sumPay - $sumMissTax;
                 @endphp
-{{--                check infoUserAccount and Salary_Accept--}}
+                {{-- check infoUserAccount and Salary_Accept--}}
             <td>{{number_format($sumTotal)}} VND</td>
 
-
-
-
-
-
-
-
                 @foreach($getValAcceptSal as $val)
-                    @if($val->month == Carbon\Carbon::parse($li->reviced_date)->month && $val->year ==Carbon\Carbon::parse($li->reviced_date)->year)
-{{--            Get Info--}}
-            <td id='UserAccept'>{{$val->name}}</td>
+                    @if($val->month == Carbon\Carbon::parse($li->reviced_date)->month && $val->year == Carbon\Carbon::parse($li->reviced_date)->year)
+                    {{-- Get Info--}}
+             <td id='UserAccept'>{{$val->name}}</td>
             <td id='Day_accept'>{{$val->date_Accept}}</td>
-
-                    @else
-                        <td id='UserAccept'></td>
-                    <td id='Day_accept'> </td>
-            @endif
+                        @php
+                             $numcount = $numcount + 1
+                        @endphp
+                 @endif
                 @endforeach
+                @if($numcount == 0)
+                    <td id='UserAccept'></td>
+                    <td id='Day_accept'></td>
+                 @endif
+
 
             <td><button class="btn btn-success btn-sm"  id="{{Carbon\Carbon::parse($li->reviced_date)->month}}/{{Carbon\Carbon::parse($li->reviced_date)->year}} " onclick="acceptSalary(this)">Xác nhận</button></td>
             <td >
@@ -86,12 +87,10 @@
                                                 <th>Ngày lĩnh</th>
                                             </tr>
                                             </thead>
-                                            <tbody id="">
-
+                                            <tbody id="showMonth">
                                             @php
                                             $value = DB::table('account')->join('contract', 'contract.id_account', 'account.id')->join('salary', 'salary.id_attent', 'contract.id')->join('role', 'role.id', 'account.id_role')->get();
                                             @endphp
-
                                             @foreach($value as $lt)
                                                 <tr>
                                                     <td>{{$num++}}</td>

@@ -111,8 +111,12 @@ class ajaxController extends Controller {
     public function getaddDatecontract($id) {
         //Tìm thông tin hợp đồng theo id
         $data = contract::find($id);
+        if($data != '')
         //Lấy ngày làm việc kết thúc sớm nhất của hợp đồng
         $getcontract = $data->checkContract($id);
+        else
+            $getcontract = '';
+
         //Kiểm tra số ngày kết thúc hợp đồng có còn không
         //Bằng $getcontract=1 nghĩa là ngày kết thúc null->hợp đồng chưa kết thúc
         if ($getcontract != "" || $getcontract == 1) echo 1;
@@ -476,6 +480,9 @@ class ajaxController extends Controller {
     }
     //Add GetInfoAcceptSalary
     public  function  GetInfoAccept($id, $year){
+
+        //Save Status all salary User pay
+           DB::table('salary')->whereMonth('reviced_date',$id)->whereYear('reviced_date',$year)->update(['status'=>'1']);
         //Get all value acceptsalary
       $accept = acceptSalary::where('month',$id)->where('year',$year)->get();
         $now = $this->gettimenow();
@@ -487,6 +494,7 @@ class ajaxController extends Controller {
             $accept['month'] = $id;
             $accept['year'] = $year;
             $accept->save();
+
             return $accept;
         }
         else

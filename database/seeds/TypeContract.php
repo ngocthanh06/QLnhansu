@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class role extends Seeder
+class TypeContract extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,8 +13,9 @@ class role extends Seeder
     {
         //
         $data = [
-            ['name_role' => 'QLNS'],['name_role' => 'Nhân viên'],
+            ['name_type' => 'Fulltime'],
+            ['name_type' => 'Parttime']
         ];
-        DB::table('role')->insert($data);
+        DB::table('type_contract')->insert($data);
     }
 }

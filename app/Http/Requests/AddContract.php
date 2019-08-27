@@ -26,16 +26,16 @@ class AddContract extends FormRequest
         return [
             //
             'num_max' => 'required',
-            'coefficients' => 'required',
+
         ];
     }
     public function messages()
     {
         return [
             //
-            
+
             'num_max.required' => 'Bạn phải chọn hình thức để setup ngày phép tối đa',
-            'coefficients.required' => 'Bạn phải chọn loại hợp đồng để setup hệ số lương'
+
         ];
     }
 }

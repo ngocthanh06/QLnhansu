@@ -47,14 +47,8 @@
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{Auth::user()->name}}</strong>
-                             </span> <span class="text-muted text-xs block">{{$role->name_role}} <b class="caret"></b></span> </span> </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="profile.html">Profile</a></li>
-                                <li><a href="contacts.html">Contacts</a></li>
-                                <li><a href="mailbox.html">Mailbox</a></li>
-                                <li class="divider"></li>
-                            <li><a href="{{asset('logout')}}">Logout</a></li>
-                            </ul>
+                             </span> <span class="text-muted text-xs block">{{$role->name_role}}</span> </span> </a>
+
                         </div>
                         <div class="logo-element">
                             IN+
@@ -873,13 +867,14 @@
 
         function month(e)
         {
+
             $('#monthA').html(e.id);
             $('#monthB').val(e.id);
-            $('#monthB').val(e.id);
+
             $.get("{{asset('ajax/getMonthSalary')}}" + '/' +e.id,function(data){
                 console.log(data);
                 $('#showMonth').html(data);
-                console.log(data);
+
             });
         }
 

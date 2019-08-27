@@ -20,13 +20,14 @@ class Account extends Migration
             $table->integer('id_role');
             $table->string('address');
             $table->boolean('sex');
-            $table->string('info');
+            $table->string('info')->nullable();
 //            $table->string('image');
             $table->string('username');
             $table->string('password');
             $table->string('passport');
             $table->string('num_account');
             $table->string('BHXH');
+            $table->string('bank');
 
             $table->timestamps();
         });

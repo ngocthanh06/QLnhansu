@@ -15,7 +15,11 @@ use App\Http\Requests\AddContract;
 
 class ContractManager extends Controller
 {
-    //
+    //Lấy thời gian
+    protected function gettimenow()
+    {
+        return Carbon::now()->toDateString();
+    }
      //Lấy quyền truy cấp
      protected function getrole(){
         //Get quyền
@@ -56,8 +60,11 @@ class ContractManager extends Controller
     public function postAddContract(AddContract $request){
 
         $data = contract::find($request->id_account);
+        if($data != null)
         //Lấy ngày làm việc kết thúc sớm nhất của hợp đồng
         $getcontract = $data->checkContract($request->id_account);
+        else
+            $getcontract = '';
         //Kiểm tra số ngày kết thúc hợp đồng có còn không
         //Bằng $getcontract=1 nghĩa là ngày kết thúc null->hợp đồng chưa kết thúc
         if($getcontract != "" || $getcontract==1)

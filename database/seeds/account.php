@@ -12,17 +12,17 @@ class account extends Seeder
     public function run()
     {
         //
-        
+
         $data = [
-            [ 'username'=>'ngocthanh04',
+            [ 'username'=>'ngocthanh06',
              'password'=>bcrypt('123123'),
              'name'=>'Đào Ngọc Thạnh',
-             'id_role'=>'3',
+             'id_role'=>'1',
              'address'=>'123123',
              'sex'=>true,
              'info'=>'3',
              'passport'=>'123123123',
-             'image'=>' '
+
              ],
             //  [ 'username'=>'ngocthanh06',
             //  'password'=>bcrypt('123123'),
@@ -34,9 +34,9 @@ class account extends Seeder
             //  'image'=>' ',
             //  'passport'=>'123123123',
             //  ],
-            
+
          ];
- 
+
      DB::table('account')->insert($data);
     }
 }

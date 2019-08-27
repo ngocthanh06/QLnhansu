@@ -19,8 +19,8 @@ class Contract extends Migration
             $table->integer('id_type_contract');
             $table->string('name_contract');
             $table->date('date_start');
-            $table->date('date_end');
-            $table->string('content');
+            $table->date('date_end')->nullable();
+            $table->string('content')->nullable();
             $table->integer('id_account');
             $table->integer('num_work');
             $table->integer('num_max');

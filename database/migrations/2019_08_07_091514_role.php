@@ -16,7 +16,7 @@ class Role extends Migration
         //
         Schema::create('Role', function (Blueprint $table) {
             $table->Increments('id');
-            $table->string('name');
+            $table->string('name_role');
             $table->timestamps();
         });
     }

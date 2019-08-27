@@ -81,7 +81,7 @@ class AttendanceManager extends Controller
         $data['per']        = count(permission::where('id_contract', $data['acc']->id)->where('status', 1)->get());
         //Vắng không phép
         $data['miss']       = count(attendance::where('id_contract', $data['acc']->id)->where('status', 0)->where('status', 0)->get());
-        // dd($data);
+//         dd(count($data['contract']));
         return view('Admin/Attendance/main', $data);
     }
 
@@ -96,6 +96,7 @@ class AttendanceManager extends Controller
         $list = DB::table('account')->join('contract', 'contract.id_account', 'account.id')->join('salary', 'salary.id_attent', 'contract.id')->join('role', 'role.id', 'account.id_role')->groupBy(DB::raw("Month(reviced_date)"))->groupBy(DB::raw("Year(reviced_date)"))->get();
         $num  = 1;
         $getValAcceptSal = DB::table('account')->join('accept_salary','account.id','accept_salary.id_AccountAcceptSalary')->get();
+
         return view('Admin/Attendance/GetAttendance', compact('role', 'list', 'num','getValAcceptSal'));
     }
 

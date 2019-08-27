@@ -44,9 +44,11 @@ $open = 'contract';
                         Tháng:<strong> {{Carbon\Carbon::parse($now)->month}}</strong><br>
                         Số công làm:  <strong>{{$work}}</strong><br>
                      </address>
-                     <div >
-                        <a class="btn btn-danger" href="{{asset('admin/salary')."/".$acc->id}}" style="margin-left:50px" >Xem chi tiết lương
-                  </a>
+
+                     <div class="col-sm-offset-4">
+
+                         <a class="btn btn-danger" href="{{asset('admin/salary')."/".$acc->id}}"  >Xem chi tiết lương
+                         </a>
                   </div>
                   <div class="col-lg-offset-2">
                      @if($countCheck>0)
@@ -125,6 +127,7 @@ $open = 'contract';
                      </thead>
                      <tbody>
                         <?php $num = 1; ?>
+                        @if(count($contract)> 0)
                         @foreach ($contract as $item)
                         <?php $id_contract = $item->id_contract ?>
                         <tr>
@@ -137,6 +140,9 @@ $open = 'contract';
                               {
                                   $item->day = Carbon\Carbon::parse($item->day)->addDay();
                                   $item->day = Carbon\Carbon::parse($item->day)->format('Y-m-d');
+
+                                $start1 = Carbon\Carbon::parse($start1)->addDay()->toDateString();
+
                               }
                               ?>
                            <td>
@@ -242,11 +248,12 @@ $open = 'contract';
                            </td>
                         </tr>
                         @endforeach
+                        @endif
                         {{-- Không có ngày kết thúc --}}
                         @if(!isset($end) && $num <=10)
                         <tr>
                            <td id='num'>{{$num++}}</td>
-                           <td>{{$item->day}}</td>
+                           <td>{{$start1}}</td>
                            <td id="day"><a></a></td>
                            <td id="status"></td>
                            <td id="att"></td>
@@ -255,7 +262,7 @@ $open = 'contract';
                            <td></td>
                            <td>
                               <div class="checkbox checkbox-success" style="margin-top: 0px;">
-                                 <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{$item->day}}" type="checkbox">
+                                 <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{$start1}}" type="checkbox">
                                  <label for="checkbox3"> </label>
                               </div>
                            </td>
@@ -266,7 +273,7 @@ $open = 'contract';
                         @if($num <=10)
                         <tr>
                            <td id='num'>{{$num++}}</td>
-                           <td>{{$item->day}}</td>
+                           <td>{{$start1}}</td>
                            <td id="day"><a></a></td>
                            <td id="status"></td>
                            <td id="att"></td>
@@ -275,13 +282,14 @@ $open = 'contract';
                            <td></td>
                            <td>
                               <div class="checkbox checkbox-success" style="margin-top: 0px;">
-                                 <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{$item->day}}" type="checkbox">
+                                 <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{$start1}}" type="checkbox">
                                  <label for="checkbox3"> </label>
                               </div>
                            </td>
                         </tr>
                         @endif
                         @endif
+
                      </tbody>
                   </table>
                   <div style="text-align:center">
