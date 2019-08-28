@@ -12,14 +12,10 @@ use DB;
 
 class ExcelController extends Controller implements FromCollection, WithHeadings
 {
-
     protected $id;
-
     public function __construct($i){
         $this->id = $i;
     }
-
-    //
     public function collection(){
         $num = 1;
         if($this->id == 'all')

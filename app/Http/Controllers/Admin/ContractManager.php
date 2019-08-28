@@ -15,58 +15,57 @@ use App\Http\Requests\AddContract;
 
 class ContractManager extends Controller
 {
-    //Lấy thời gian
+    //Get time now
     protected function gettimenow()
     {
         return Carbon::now()->toDateString();
     }
-     //Lấy quyền truy cấp
+     //Get role
      protected function getrole(){
-        //Get quyền
+        //Get role
         return account::find(Auth::user()->id_role)->getRole;
     }
-    //Tính số ngày
-    //Tính khoảng cách của 2 ngày
+    //caculate distance the number of 2 day
     public function cal2Day($date_start,$date_end){
         $data = (strtotime($date_end) - strtotime($date_start))/ (60 * 60 * 24);
         return $data;
-}
- //Chuyển đổi đinh dạng ngày
- protected function formatDate($day)
- {
-    return date("Y-m-d",strtotime($day));
- }
+    }
+    //Convert format day
+    protected function formatDate($day)
+    {
+     return date("Y-m-d",strtotime($day));
+    }
 
-    //Hợp đồng
-    //Lấy danh sách hợp đồng
+    //Contract
+    //Get list contract
     public function getContract(){
-        //Get quyền
+        //Get role
         $data['role'] = $this->getrole();
-        //Lấy thông tin danh sách hợp đồng có loại hợp đồng và thông tin nhân viên
+        //Get infomation list contract have type contract and info employees ?
         $data['contract'] = DB::table('contract')->select('contract.coefficients','contract.id','name_contract','date_start','date_end','num_work','name','username','name_type')->join('account','account.id','contract.id_account')->join('type_contract','contract.id_type_contract','type_contract.id')->where('account.id_role',2)->orderBy('contract.id')->paginate(5);
         $data['now'] = Carbon::now()->toDateString();
         return view('Admin/Contract/main',$data);
     }
-    //Thêm hợp đồng
+    //Add contract
     public function getAddContract(){
-        //Get quyền
+        //Get role
         $data['role'] = $this->getrole();
-        //Lấy loại hợp đồng
+        //Get contract
         $data['type_contract'] = Type_contract::all();
         $data['user'] = account::all()->where('id_role',2);
         return view('Admin/Contract/Add',$data);
     }
-    //Post Thêm hợp đồng
+    //Post add contract
     public function postAddContract(AddContract $request){
 
         $data = contract::find($request->id_account);
         if($data != null)
-        //Lấy ngày làm việc kết thúc sớm nhất của hợp đồng
+            //Get working the earliest day end of contract
         $getcontract = $data->checkContract($request->id_account);
         else
             $getcontract = '';
-        //Kiểm tra số ngày kết thúc hợp đồng có còn không
-        //Bằng $getcontract=1 nghĩa là ngày kết thúc null->hợp đồng chưa kết thúc
+        //checking number day ends have exist ?
+        // $getcontract=1 have mean day ends = null -> contract hasn't finished
         if($getcontract != "" || $getcontract==1)
         return back()->withInput()->with('error','Nhân viên vẫn còn hợp đồng');
         else{
@@ -85,11 +84,11 @@ class ContractManager extends Controller
     }
     //Get Edit contract
     public function getEditContract($id){
-        //Get quyền
+        //Get role
         $data['role'] = $this->getrole();
-        //Truy vấn hợp đồng
+        //query contract
         $data['contract'] = contract::find($id);
-        //Lấy loại hợp đồng
+        //get type contract
         $data['type_contract'] = Type_contract::all();
         $data['user'] = account::all()->where('id_role',2);
         return view('Admin/Contract/Edit',$data);
@@ -115,7 +114,7 @@ class ContractManager extends Controller
 
     }
 
-    //Hủy Hợp đồng
+    //cancel contract
     public function DeleteContract($id){
         //Get quyền
         $data['role'] = $this->getrole();
@@ -123,7 +122,7 @@ class ContractManager extends Controller
         return view ('Admin/Contract/Dele',$data);
     }
 
-    //Post hủy hợp đồng
+    //Post cancel contract
     public function PostDeleteContract(Request $request,$id){
 
         $contract = contract::find($id);

@@ -16,50 +16,41 @@ use App\Models\attendance;
 
 class HomeController extends Controller
 {
-    //Lấy quyền truy cấp
+    //Get role
     protected function getrole(){
-        //Get quyền
         return account::find(Auth::user()->id_role)->getRole;
     }
 
-    //Trang chủ
+    //Home
     public function gethome(){
 
-        //Get quyền
+        //Get role
         $data['role'] = $this->getrole();
-
         $data['ro'] = count(contract::where('id_account',Auth::user()->id)->whereNull('date_end')->get());
-        //Nếu người dùng chưa có tài khoảng hợp đồng
+        //if employees haven't contract
         if($data['ro'] == 0)
             return redirect()->route('categoryOrder');
-        // Lấy tháng hiện tại
+        // get month now
         $data['month'] = Carbon::now()->month;
-        //Lấy hợp đồng còn hạn sử dụng trong danh sách hợp đồng của nhân viên có ngày kết thúc là null
+        //get contract is out of date in list contracts of the employees have day end is null
         $data['get'] = DB::table('contract')->join('attendance','contract.id','attendance.id_contract')->whereNull('contract.date_end')->where('contract.id_account',Auth::user()->id)->where('attendance.status',1)->whereMonth('attendance.day',$data['month'])->get();
-        //Lấy số ngày làm với hợp đồng có ngày kết thúc là null
+        //Get num workdays with contract have day end is null
         $data['num_day'] = count($data['get']);
-        //Lấy số ngày nghỉ phép
+        //get num day off
         $data['num_per'] = count(DB::table('permission')->join('contract','contract.id','permission.id_contract')->where('contract.id_account',Auth::user()->id)->where('permission.status',1)->whereNull('contract.date_end')->get());
-        //Số ngày phép còn lại
+        //the num permission remaining (Số ngày phép còn lại)
         $data['num_per_pass'] = 12 - $data['num_per'];
-        //Lấy thông tin hợp đồng
+        //Get contract infomation
         $data['contract'] = contract::where('id_account',Auth::user()->id)->whereNull('contract.date_end')->first();
-        //Kiểm tra lương
+        //check Salary
         $data['sala'] = DB::table('salary')->join('contract','salary.id_attent','contract.id')->where('contract.id_account',Auth::user()->id)->where('salary.id_attent',$data['contract']->id)->whereMonth('salary.reviced_date',$data['month'])->get();
-        //Số ngày vắng không phép
+        //The number day off not permission
         $data['miss'] = count(DB::table('contract')->join('attendance','contract.id','attendance.id_contract')->whereNull('contract.date_end')->where('contract.id_account',Auth::user()->id)->where('attendance.status',0)->get());
         return view('Admin/calendar',$data);
     }
-    public function posthome(Request $request){
-
-
-    }
-    //Gọi xuất excel
+    // call export excel
     public function export(Request $request){
-        // dd($request->all());
-
         return Excel::download(new ExcelController($request->month), 'LuongQLNSNV.xlsx');
-
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\attendance;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -13,27 +14,25 @@ use DB;
 
 class UserManager extends Controller
 {
-    //
-    //Lấy quyền truy cấp
+    //Get role
     protected function getrole(){
-        //Get quyền
         return account::find(Auth::user()->id_role)->getRole;
     }
-     //Danh sách nhân viên
+     //List employees
      public function getUser(){
-        //Get quyền
+        //Get role
         $data['role'] = $this->getrole();
         $data['all_User'] =DB::table('account')->select('account.address','account.id','name','name_role','sex','info','username','passport','account.num_account','account.BHXH')->leftjoin('role','role.id','account.id_role')->where('id_role','1')->orWhere('id_role','2')->paginate(5);
 
         return view('Admin/Nhanvien/main',$data);
     }
-    //Get add nhân viên
+    //Get add employees
     public function getAddUser(){
-        //Get quyền
+        //Get role
         $data['role'] = $this->getrole();
         return view('Admin/Nhanvien/Add',$data);
     }
-    //Post Nhân viên
+    //Post employees
     public function postAddUser(AddUserRequest $request){
         $user = new account;
         $user['bank'] = $request->bank;
@@ -48,17 +47,17 @@ class UserManager extends Controller
         $user['num_account']=$request->num_account;
         $user['BHXH'] = $request->BHXH;
         $user->save();
-        return redirect()->intended('admin/user')->with('success','Thêm nhân viên thành công');
+        return redirect()->intended('admin/user')->with('success', 'Thêm nhân viên thành công');
     }
-    //Get edit nhân viên
+    //Get edit employees
     public function getEditUser($id){
-         //Get quyền
+         //Get role
          $data['role'] = $this->getrole();
          $data['user'] = account::find($id);
          return view('Admin/Nhanvien/Edit',$data);
 
     }
-    //Post edit nhân viên
+    //Post edit employees
     public function postEditUser(EditUserRequest $request,$id){
         $user = account::find($id);
         $user['bank'] = $request->bank;
@@ -81,7 +80,7 @@ class UserManager extends Controller
         return redirect()->intended('admin/user')->with('error','Thông tin không thay đổi');
 
     }
-    //Delete Nhân viên
+    //Delete employees
     public function getDeleteUser($id){
         $user = account::find($id);
         $user->Delete();

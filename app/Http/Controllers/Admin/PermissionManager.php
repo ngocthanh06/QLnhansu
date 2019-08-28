@@ -14,32 +14,27 @@ use Illuminate\Support\Facades\Hash;
 
 class PermissionManager extends Controller
 {
+    //Get role
     protected function getrole(){
-        //Get quyền
         return account::find(Auth::user()->id_role)->getRole;
     }
-    //Lấy thời gian
+    //Lấy time now
     protected function gettimenow()
     {
         return Carbon::now()->toDateString();
     }
-    //
-    //Lấy đơn xin nghỉ phép
+    //get permission
     public function getPermission(){
-        
-        //Get quyền ->id của role
+        //Get role by role id
         $data['role'] = $this->getrole();
-        //Lấy id của tài khoản nhân viên để truy vấn dữ liệu của hợp đồng hiện có-> (contract) join thên loại hợ đồng
+        //get account id then query data of the contract existing and contract should join with type contract
         $contract = contract::find(Auth::user()->id);
         $data['contract_user'] = $contract->getContr($contract->id);
-        //rồi truy ván dữ liệu lấy thông tin hợp đồng có được-> (attendance)
-        //Sau đó truy vấn lấy chi tiết hợp đồng->(attendane)->1 ngày tương ứng với 1 phép nếu có.
+        //query data get info contract
+        //after query detail contract -> attendance -> 1 is permission if have
         $data['num'] = 1;
-        //Lấy id xong 
-        //Lấy thời gian hiện tại
         $data['now'] = $this->gettimenow();
-       // dd($data);
         return view('Admin/Permission/main',$data);
    }
-   
+
 }

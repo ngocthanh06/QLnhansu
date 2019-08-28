@@ -18,29 +18,28 @@ use Illuminate\Support\Facades\Hash;
 
 class SalaryManager extends Controller
 {
+    //get role
     protected function getrole()
     {
-        //Get quyền
         return account::find(Auth::user()->id_role)->getRole;
     }
-    //Tính khoảng cách của 2 ngày
+    //calendal distance 2 days
     public function cal2Day($date_start,$date_end){
         $data = (strtotime($date_end) - strtotime($date_start))/ (60 * 60 * 24);
         return $data;
     }
-
-    //Lấy thời gian
+    //Get time now
     protected function gettimenow()
     {
         return Carbon::now()->toDateString();
     }
-    //Lấy tháng hiện tại
+    //Get Month now
     protected function getMonth()
     {
         $date = Carbon::now();
         return $date->month;
     }
-    //Lấy dữ liệu ngày công theo id contrac, per,sta theo tháng
+    //get val workdays by contract, per, sta with month
     protected  function  getValMonth($month,$id)
     {
         return attendance::where(function($query) use ($id, $month) {
@@ -49,83 +48,73 @@ class SalaryManager extends Controller
             $request->whereMonth('day',$month)->where('id_contract',$id)->where('permission',0)->where('status',0);
         })->get();
     }
-
-    //Số ngày công đã làm được theo id contract
+    //num workdays done with contract id
     protected function getAtt($id)
     {
         return DB::table('attendance')->where('id_contract', $id)->where('status', '1')->where('permission', '0')->orWhere('status', '1')->where('permission', '1')->where('id_contract', $id)->get();
     }
-    //Số ngày đã thanh toán
+    //Num pay days
     protected function getPay($id){
         return DB::table('salary')->select('num_done')->where('id_attent',$id)->get();
     }
-
-    //Chuyển đổi đinh dạng ngày
+    //Convert format day
     protected function formatDate($day)
     {
         return date("Y-m-d", strtotime($day));
     }
-
-    //Chuyển đổi tiền sang số
+    //convert money -> num
     protected function formatVNDtoInt($num)
     {
         return preg_replace("/([^0-9\\.])/i", "", $num);
     }
-
     //Attent work in month
     protected function getMonthWork($id)
     {
         return DB::table('attendance')->where('id_contract', $id)->where('status', '1')->where('permission', '0')->whereMonth('day',Carbon::parse(Carbon::now())->month)->orWhere('status', '1')->where('permission', '1')->where('id_contract', $id)->whereMonth('day',Carbon::parse(Carbon::now())->month)->get();
     }
-
-    //Get lương
+    //Get salary
     public function getSalary($id)
     {
-        //Lấy quyền
         $data['role'] = $this->getrole();
-        //Lấy thông tin của hợp đồng
+        //get contract info
         $info = contract::find($id);
-        //Lấy thông tin của nhân viên
+        //Get employees info
         $data['acc'] = $info->getAccount($id);
-        //Lấy thời gian hiện tại
+        //Get time now
         $data['now'] = $this->gettimenow();
-        //Lấy thông tin của attend
+        //get attend info
         $data['info'] = $this->getAtt($id);
-        //Lấy số ngày công đã làm trong tháng
+        //get workdays num done in month
         $data['att'] = count($this->getAtt($id));
-        //Lấy số ngày công đã thanh toán
+        //get workdays num paid
         $sumpay = $this->getPay($id);
         $data['pay'] = 0;
-        //Lấy số ngày công đã thanh toán
         foreach($sumpay as $sum)
         {
             $data['pay'] = $data['pay'] + $sum->num_done;
         }
-        //Lấy danh sách lãnh lương của nhân viên
+        //get list salary of the employees
         $data['salary'] = DB::table('salary')->where('id_attent', $id)->get();
-        //Số thứ tự
+        //num
         $data['num'] = 1;
         $data['now'] = $this->gettimenow();
         $data['id'] = $id;
-        //Lấy số ngày phép
+        //get permission
         $data['per'] = count(permission::where('id_contract',$data['acc']->id)->where('status',1)->get());
-        //Vắng không phép
+        //Unexcused absence
         $data['miss'] = count(attendance::where('id_contract',$data['acc']->id)->where('status',0)->where('status',0)->get());
         return view('Admin/Salary/main', $data);
     }
 
-    //Post lương
+    //Post salary
     public function postSalary(AddSalaryRequest $request, $id)
     {
         $salary = salary::find($id);
-
-        //Kiểm tra thanh toán đã tồn tại chưa
-
+        //check pay exits
         if ($salary == null) {
             $timeSa = Carbon::parse($request->date_now)->toDateString();
-            //Kiểm tra số ngày công trong hợp đồng
+            //chekc day number in the contract
             $attent = attendance::where('id_contract',$id)->get();
-
             foreach($attent as $att)
             {
                 $time = Carbon::parse($att->day)->toDateString();
@@ -138,7 +127,6 @@ class SalaryManager extends Controller
             $salary['num_attendance'] = $request->num_attendance;
             $salary['position'] = $request->position;
             $salary['reward'] = $request->reward;
-            //Lương theo ngày
             $salary['allowance'] = $request->salary_date;
             $salary['sum_position'] = $this->formatVNDtoInt($request->sum_postion);
             $salary['reviced_date'] = $this->formatDate($request->date_now);
@@ -146,21 +134,17 @@ class SalaryManager extends Controller
             $salary['id_attent'] = $id;
             $salary->save();
         } else {
-
             $salary['position'] = $request->position + $salary->position;
             $salary['reward'] = $request->reward + $salary->reward;
-            //Lương theo ngày
             $salary['sum_position'] = $this->formatVNDtoInt($request->sum_postion) + $salary->sum_position;
             $salary['reviced_date'] = $this->formatDate($request->date_now);
             $salary['num_done'] = $request->num_done + $salary->num_done;
             $salary->update();
         }
-
-
         return back()->withInput()->with('success', 'Thanh toán lương thành công');
     }
 
-    //Tính lương theo tháng mới
+    //new monthly salary
     public function PostMonth(Request $request)
     {
 
@@ -176,7 +160,6 @@ class SalaryManager extends Controller
             $salary['num_attendance'] = $request->num_attendance;
             $salary['position'] = $request->position;
             $salary['reward'] = $request->reward;
-            //Lương theo ngày
             $salary['allowance'] = $request->salary_date;
             $salary['sum_position'] = $this->formatVNDtoInt($request->sum_postion);
             $salary['reviced_date'] = $this->formatDate($request->date_now);
@@ -186,7 +169,6 @@ class SalaryManager extends Controller
             return back()->withInput()->with('success','Thêm thành công');
         }
     }
-
     //Salary Employs
     public  function SalaryEmploys(){
         //get role user
