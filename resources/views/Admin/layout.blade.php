@@ -766,7 +766,18 @@
 
 
 
+
     <script >
+
+        //Check Add/Edit Account
+        function check(e)
+        {
+             // $('#'+e.id).val();
+            if($('#'+e.id).val() == '' ||$('#'+e.id).val().trim === '' )
+            $('#error'+e.id).html("<p style='margin-bottom: 0; margin-top: 15px; color: crimson '>"+ e.placeholder+" không được để trống </p>");
+            else if($('#'+e.id).val() != '')
+            $('#error'+e.id).empty();
+        }
 
     $(document).ready(function() {
 
@@ -851,6 +862,9 @@
             $('.footable').footable();
             $('.footable2').footable();
 
+
+
+
         });
 
     </script>
@@ -892,11 +906,6 @@
     //Lấy hợp đồng
     $(document).ready(function() {
         //Select lương theo tháng
-
-
-
-
-
 
         //DataTable
         $('#table_id').DataTable();

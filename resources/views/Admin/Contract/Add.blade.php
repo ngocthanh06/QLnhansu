@@ -2,7 +2,7 @@
 @extends('Admin.layout')
 @section('content')
 <div class="ibox-title">
-   <h5><a href="{{asset('admin/contract')}}">Danh sách hợp đồng </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Thêm hợp đồng</h5>':''!!} 
+   <h5><a href="{{asset('admin/contract')}}">Danh sách hợp đồng </a></h5> <h5>&nbsp;/&nbsp;</h5> {!! $open == 'contract' ? '<h5>Thêm hợp đồng</h5>':''!!}
 </div>
      <div class="ibox-content">
      <form method="POST" action="{{asset('admin/AddContract')}}" class="form-horizontal">
@@ -13,9 +13,9 @@
             <select class="form-control m-b" id="id_type_contract" name="id_type_contract">
                  @foreach($type_contract as $type)
                     <option {{old('$type->id') == $type->id ? 'selected':''}} value="{{$type->id}}">{{$type->name_type}}</option>
-                @endforeach         
+                @endforeach
             </select>
-              
+
             </div>
            </div>
            <div class="hr-line-dashed"></div>
@@ -25,7 +25,7 @@
                 <select class="form-control m-b" id='account' name="id_account">
                         @foreach($user as $type)
                            <option {{old('$type->id') == $type->id ? 'selected':''}} value="{{$type->id}}">{{$type->name}}</option>
-                       @endforeach         
+                       @endforeach
                    </select>
             </div>
            </div>
@@ -39,7 +39,10 @@
            <div class="hr-line-dashed"></div>
            <div class="form-group">
               <label class="col-sm-2 control-label">Tên hợp đồng</label>
-           <div class="col-sm-10"><input type="text" required value="{{old('name_contract')}}" name="name_contract" placeholder="Nhập tên hợp đồng" class="form-control"> </div>
+           <div class="col-sm-10"><input type="text" required value="{{old('name_contract')}}" id="name_contract" onkeydown="check(this)" name="name_contract" placeholder="Tên hợp đồng" class="form-control">
+               <span id="errorname_contract" ></span>
+           </div>
+
            </div>
 
            <div class="hr-line-dashed"></div>
@@ -73,7 +76,7 @@
               <textarea name="content" id="editor" cols="30" rows="10" placeholder="Nhập nội dung thông tin thêm">{{old('content')}}</textarea>
               </div>
            </div>
-          
+
      <div class="hr-line-dashed"></div>
      <div class="form-group" style="text-align:right">
      <div class="col-sm-9 col-sm-offset-2">

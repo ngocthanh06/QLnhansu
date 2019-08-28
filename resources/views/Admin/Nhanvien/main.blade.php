@@ -1,3 +1,4 @@
+
 <?php $open = 'account' ?>
 @extends('Admin.layout')
 @section('content')
@@ -25,10 +26,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                
+
                     @foreach ($all_User as $user)
                     <tr>
-                        <td>{{$user->id}}</td> 
+                        <td>{{$user->id}}</td>
                         <td>{{$user->name}}</td>
                         <td>{{$user->name_role}}</td>
                         <td>{{$user->address}}</td>
@@ -37,13 +38,13 @@
                         <td>{{$user->username}}</td>
                         <td>{{$user->num_account}}</td>
                         <td>{{$user->BHXH}}</td>
-                        <td>{{$user->passport}}</td> 
+                        <td>{{$user->passport}}</td>
                         <td>
                         <a href="{{asset('admin/editUser')."/".$user->id}}" class="btn btn-primary">Sửa</a>
                             <a href="{{asset('admin/deleteUser')."/".$user->id}}" class="btn btn-danger">Xóa</a>
                         </td>
-                    </tr>  
-                   
+                    </tr>
+
                     @endforeach
                 </tbody>
             </table>
@@ -52,6 +53,6 @@
             </div>
         </div>
     </div>
-    
+
 
 @stop

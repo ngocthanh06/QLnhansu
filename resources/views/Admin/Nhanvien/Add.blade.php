@@ -10,36 +10,43 @@
       <div class="form-group">
 
          <label class="col-sm-2 control-label">Họ và tên</label>
+
       <div class="col-sm-10">
-            {{ Form::text('name', old('name'), array('required','placeholder'=>'Nhập họ và tên','class'=>'form-control')) }}
+            {{ Form::text('name', old('name'), array('required','placeholder'=>'Họ và tên','class'=>'form-control','onkeydown'=>'check(this)','id'=>'name')) }}
+          <span id="errorname" ></span>
       </div>
+
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Username</label>
       <div class="col-sm-10">
-         {{Form::text('username',old('username'),array('required','placeholder'=>'Nhập username', 'class'=>'form-control'))}}
+         {{Form::text('username',old('username'),array('required','placeholder'=>'Username', 'class'=>'form-control','onkeydown'=>'check(this)','id'=>'username'))}}
+          <span id="errorusername" ></span>
       </div>
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Password</label>
       <div class="col-sm-10">
-         {!! Form::password('password', array('required','placeholder'=>'Nhập password','class'=>'form-control')) !!}
+         {!! Form::password('password', array('required','placeholder'=>'Password','class'=>'form-control','onkeydown'=>'check(this)','id'=>'password')) !!}
+          <span id="errorpassword" ></span>
       </div>
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Chứng minh nhân dân</label>
       <div class="col-sm-10">
-         {!! Form::text('passport', old('passport'), array('class'=>'form-control', 'placeholder'=>'Nhập chứng minh nhân dân')) !!}
+         {!! Form::text('passport', old('passport'), array('required','class'=>'form-control', 'placeholder'=>'Chứng minh nhân dân','onkeydown'=>'check(this)','id'=>'passport')) !!}
+          <span id="errorpassport" ></span>
       </div>
       </div>
       <div class="hr-line-dashed"></div>
       <div class="form-group">
          <label class="col-sm-2 control-label">Địa chỉ</label>
       <div class="col-sm-10">
-         {!! Form::text('address', old('address'), array('placeholder'=>'Nhập địa chỉ của nhân viên', 'class'=>'form-control')) !!}
+         {!! Form::text('address', old('address'), array('required','placeholder'=>'Địa chỉ của nhân viên', 'class'=>'form-control','onkeydown'=>'check(this)','id'=>'address')) !!}
+          <span id="erroraddress" ></span>
       </div>
 
       </div>
@@ -47,14 +54,16 @@
       <div class="form-group">
          <label class="col-sm-2 control-label">Số tài khoản</label>
       <div class="col-sm-10">
-         {!! Form::text('num_account', old('num_account'), array('placeholder'=>'Nhập thông tin tài khoản ngân hàng', 'class'=>'form-control')) !!}
+         {!! Form::text('num_account', old('num_account'), array('required','placeholder'=>'Thông tin tài khoản ngân hàng', 'class'=>'form-control','onkeydown'=>'check(this)','id'=>'num_account')) !!}
+          <span id="errornum_account" ></span>
       </div>
       </div>
           <div class="hr-line-dashed"></div>
           <div class="form-group">
               <label class="col-sm-2 control-label">Ngân hàng</label>
               <div class="col-sm-10">
-                  {!! Form::text('bank', old('bank'), array('placeholder'=>'Nhập thông tin tên ngân hàng', 'class'=>'form-control')) !!}
+                  {!! Form::text('bank', old('bank'), array('required','placeholder'=>'Thông tin tên ngân hàng', 'class'=>'form-control','onkeydown'=>'check(this)','id'=>'bank')) !!}
+                  <span id="errorbank" ></span>
               </div>
 
       </div>
@@ -63,6 +72,7 @@
          <label class="col-sm-2 control-label">Bảo hiểm xã hội</label>
       <div class="col-sm-10">
          {!! Form::text('BHXH', old('BHXH'), array('placeholder'=>'Nhập BHXH của nhân viên', 'class'=>'form-control')) !!}
+
       </div>
 
       </div>
