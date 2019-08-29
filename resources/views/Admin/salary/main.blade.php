@@ -76,6 +76,7 @@
                                          $yearNow = Carbon\Carbon::parse($now)->year;
                                          $monthReviced = Carbon\Carbon::parse($sa->reviced_date)->month;
                                          $yearReviced = Carbon\Carbon::parse($sa->reviced_date)->year;
+
                                      @endphp
 
                                     @if($sa->num_attendance - $sa->num_done != 0)
@@ -138,7 +139,7 @@
                                     </tr>
                                     @endforeach
                                     </tbody>
-                                    @if($monthNow > $monthReviced ||$monthNow> $yearReviced)
+                                    @if($monthNow > $monthReviced || $yearNow > $yearReviced)
                                         <div style="text-align: left">
                                             <button class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#myModal">Thanh toán lương tháng {{$monthNow}}</button>
                                             <!-- Modal -->
