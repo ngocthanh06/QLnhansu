@@ -40,7 +40,7 @@
     <div id="wrapper">
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu">F@
+                <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element"> <span>
                             <img alt="image" class="img-circle" src="img/profile_small.jpg" />
@@ -79,6 +79,9 @@
                     </li>
                         <li class="<?php echo isset($open) && $open == 'salaryEm' ?'active':'' ?>">
                             <a href="{{asset('admin/SalaryEmploys')}}"><i class="fa fa-pie-chart"></i> <span class="nav-label">Lương nhân viên</span>  </a>
+                        </li>
+                        <li class="<?php echo isset($open) && $open == 'changepass' ?'active':'' ?>">
+                            <a href="{{asset('admin/changepass')}}"><i class="fa fa-pie-chart"></i> <span class="nav-label">Đổi mật khẩu</span>  </a>
                         </li>
                     @endif
                 </ul>

@@ -42,8 +42,8 @@
           <div class="col-sm-10">
               {!! Form::text('num_account', $user->num_account, array('placeholder'=>'Nhập thông tin tài khoản ngân hàng', 'class'=>'form-control')) !!}
           </div>
-                <div class="hr-line-dashed"></div>
             </div>
+                <div class="hr-line-dashed"></div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Tên ngân hàng</label>
                 <div class="col-sm-10">

@@ -85,7 +85,10 @@ Route::group(['namespace'=>'Admin'],function(){
         //Bảng lương
         Route::get('GetAtendance','AttendanceManager@GetAtendance')->middleware('checkRoleEm');
 
-
+        //get change password
+        Route::get('changepass','UserManager@ChanggePassEmployees');
+        //post change password
+        Route::post('changepass','UserManager@PostChangePassEmployees');
         //Export Excel
         Route::post('Export','HomeController@export');
 

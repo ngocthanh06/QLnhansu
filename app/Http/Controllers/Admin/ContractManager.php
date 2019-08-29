@@ -69,17 +69,13 @@ class ContractManager extends Controller
         if($getcontract != "" || $getcontract==1)
         return back()->withInput()->with('error','Nhân viên vẫn còn hợp đồng');
         else{
-        $contract = new contract;
-        $contract['id_type_contract'] = $request->id_type_contract;
-        $contract['id_account']= $request->id_account;
-        $contract['name_contract']= $request->name_contract;
-        $contract['date_start']= date("Y-m-d",strtotime($request->date_now));
-        $contract['num_max']= $request->num_max;
-        $contract['coefficients']= $request->coefficients;
-        $contract['content']= $request->content;
-        $contract['num_work']= (strtotime($request->date_end) - strtotime($request->date_start))/ (60 * 60 * 24)+1;
-        $contract->save();
-        return redirect()->intended('admin/contract')->with('success','Thêm hợp đồng thành công');
+            $request['date_start'] = date("Y-m-d",strtotime($request->date_now));
+            $request['num_work'] = (strtotime($request->date_end) - strtotime($request->date_start))/ (60 * 60 * 24)+1;
+            $contract = contract::create($request->all());
+            if($contract)
+                return redirect()->intended('admin/contract')->with('success','Thêm hợp đồng thành công');
+            else
+                return back()->withInput()->with('error','Không thành công');
         }
     }
     //Get Edit contract
@@ -96,6 +92,8 @@ class ContractManager extends Controller
     }
     //Post Edit contract
     public function postEditContract(Request $request,$id){
+        $request['date_start'] = date("Y-m-d",strtotime($request->date_now));
+        $request['num_work'] = (strtotime($request->date_end) - strtotime($request->date_start))/ (60 * 60 * 24)+1;
         $contract = contract::find($id);
         $contract['id_type_contract'] = $request->id_type_contract;
         $contract['id_account']= $request->id_account;

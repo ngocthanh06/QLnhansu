@@ -34,20 +34,12 @@ class UserManager extends Controller
     }
     //Post employees
     public function postAddUser(AddUserRequest $request){
-        $user = new account;
-        $user['bank'] = $request->bank;
-        $user['name'] = $request->name;
-        $user['address'] = $request->address;
-        $user['username'] = $request->username;
-        $user['password'] = bcrypt($request->password);
-        $user['passport'] = $request->passport;
-        $user['id_role'] = $request->id_role;
-        $user['info'] = $request->info;
-        $user['sex'] = $request->sex;
-        $user['num_account']=$request->num_account;
-        $user['BHXH'] = $request->BHXH;
-        $user->save();
+        $request['password'] = bcrypt($request->password);
+        $account = account::create($request->all());
+        if($account)
         return redirect()->intended('admin/user')->with('success', 'Thêm nhân viên thành công');
+        else
+            return back()->withInput()->with('error','Không thành công');
     }
     //Get edit employees
     public function getEditUser($id){
@@ -85,5 +77,30 @@ class UserManager extends Controller
         $user = account::find($id);
         $user->Delete();
         return back()->withInput()->with('success','Đã xóa thành công');
+    }
+    //Get change pass Employees
+    public function ChanggePassEmployees(){
+        //Get role
+        $data['role'] = $this->getrole();
+        $data['user'] = account::find(Auth::user()->id);
+
+        return view('Admin/Nhanvien/changePassEmployees',$data);
+    }
+    //Post change pass Employees
+    public  function  PostChangePassEmployees(Request $request){
+        $user = account::find(Auth::user()->id);
+        $user['bank'] = $request->bank;
+        $user['address'] = $request->address;
+        if(!Hash::check($user['password'],Hash::make($request->password)))
+            $user['password'] =  hash::make($request->password);
+        $user['passport'] = $request->passport;
+        $user['num_account']= $request->num_account;
+        $user['BHXH'] = $request->BHXH;
+        if(!empty($user->getDirty())){
+            $user->update();
+            return back()->withInput()->with('success','Sửa thông tin thành công');
+        }
+        else
+            return back()->withInput()->with('error','Thông tin không thay đổi');
     }
 }
