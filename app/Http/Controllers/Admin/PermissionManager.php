@@ -12,6 +12,7 @@ use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
+
 class PermissionManager extends Controller
 {
     //Get role

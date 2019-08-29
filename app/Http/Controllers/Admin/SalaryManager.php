@@ -15,6 +15,7 @@ use DB;
 use Carbon\Carbon;
 use App\Models\permission;
 use Illuminate\Support\Facades\Hash;
+use FLMess;
 
 class SalaryManager extends Controller
 {
@@ -121,7 +122,7 @@ class SalaryManager extends Controller
             }
             if($this->cal2Day($time,$timeSa) < 0)
             {
-                return back()->withInput()->with('error','Ngày thanh toán không được nhỏ hơn ngày công hiện có');
+                return back()->withInput()->with('error',FLMess::checkday());
             }
             $salary = new salary;
             $salary['num_attendance'] = $request->num_attendance;
@@ -141,7 +142,7 @@ class SalaryManager extends Controller
             $salary['num_done'] = $request->num_done + $salary->num_done;
             $salary->update();
         }
-        return back()->withInput()->with('success', 'Thanh toán lương thành công');
+        return back()->withInput()->with('success', FLMess::paySalary());
     }
 
     //new monthly salary
@@ -166,7 +167,7 @@ class SalaryManager extends Controller
             $salary['num_done'] = $request->num_done;
             $salary['id_attent'] = $request->id;
             $salary->save();
-            return back()->withInput()->with('success','Thêm thành công');
+            return back()->withInput()->with('success',FLMess::AddSuccess());
         }
     }
     //Salary Employs

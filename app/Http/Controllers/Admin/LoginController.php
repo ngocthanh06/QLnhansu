@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\account;
-
+use FLMess;
 
 class LoginController extends Controller
 {
@@ -32,7 +32,7 @@ class LoginController extends Controller
 
             }
             else
-            return back()->withInput()->with('error','Sai tên đăng nhập hoặc mật khẩu');
+            return back()->withInput()->with('error',FLMess::checklogin());
 
         }
 

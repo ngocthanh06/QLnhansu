@@ -15,7 +15,7 @@ use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\Exportable;
 use mysql_xdevapi\Session;
-
+use FLMess;
 
 class AttendanceManager extends Controller
 {
@@ -103,7 +103,7 @@ class AttendanceManager extends Controller
         $attent['checkin']  = Carbon::parse($request->checkin)->ToTimeString();
         $attent['checkout'] = Carbon::parse($request->checkout)->ToTimeString();
         $attent->save();
-        return back()->withInput()->with('success', 'Thành công');
+        return back()->withInput()->with('success', FLMess::successA());
     }
 
 }

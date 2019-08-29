@@ -141,8 +141,8 @@ return [
          */
         //Execl
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        
-        
+
+
         //Form
         Collective\Html\HtmlServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
@@ -180,7 +180,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        App\Providers\FlashMessProvider::class
     ],
 
     /*
@@ -233,7 +233,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'FLMess' => App\FlashMess\Facade\FlashCade::class
     ],
 
 ];

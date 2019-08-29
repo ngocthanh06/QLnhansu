@@ -11,6 +11,7 @@ use App\Http\Requests\EditUserRequest;
 use App\Models\account;
 use Illuminate\Support\Facades\Hash;
 use DB;
+use FLMess;
 
 class UserManager extends Controller
 {
@@ -37,9 +38,9 @@ class UserManager extends Controller
         $request['password'] = bcrypt($request->password);
         $account = account::create($request->all());
         if($account)
-        return redirect()->intended('admin/user')->with('success', 'Thêm nhân viên thành công');
+        return redirect()->intended('admin/user')->with('success', FLMess::AddSuccess());
         else
-            return back()->withInput()->with('error','Không thành công');
+            return back()->withInput()->with('error',FLMess::unsuccessful());
     }
     //Get edit employees
     public function getEditUser($id){
@@ -66,17 +67,17 @@ class UserManager extends Controller
         $user['BHXH'] = $request->BHXH;
         if(!empty($user->getDirty())){
            $user->update();
-           return redirect()->intended('admin/user')->with('success','Sửa thông tin thành công');
+           return redirect()->intended('admin/user')->with('success',FLMess::EditSuccess());
         }
         else
-        return redirect()->intended('admin/user')->with('error','Thông tin không thay đổi');
+        return redirect()->intended('admin/user')->with('error',FLMess::constantA());
 
     }
     //Delete employees
     public function getDeleteUser($id){
         $user = account::find($id);
         $user->Delete();
-        return back()->withInput()->with('success','Đã xóa thành công');
+        return back()->withInput()->with('success',FLMess::DeleSuccess());
     }
     //Get change pass Employees
     public function ChanggePassEmployees(){
@@ -98,9 +99,9 @@ class UserManager extends Controller
         $user['BHXH'] = $request->BHXH;
         if(!empty($user->getDirty())){
             $user->update();
-            return back()->withInput()->with('success','Sửa thông tin thành công');
+            return back()->withInput()->with('success',FLMess::EditSuccess());
         }
         else
-            return back()->withInput()->with('error','Thông tin không thay đổi');
+            return back()->withInput()->with('error',FLMess::constantA());
     }
 }

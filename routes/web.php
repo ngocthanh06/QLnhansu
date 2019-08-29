@@ -42,13 +42,9 @@ Route::group(['namespace'=>'Admin'],function(){
         Route::post('editUser/{id}','UserManager@postEditUser');
         //Delete Nhân viên
         Route::get('deleteUser/{id}','UserManager@getDeleteUser')->middleware('checkRoleEm');
-
         //
         //Loại hợp đồng
         Route::get('type_contract','TypeContractManager@getTypeContract')->middleware('checkRoleEm');
-
-
-
         //Hợp đồng
         //Lấy danh sách loại hợp đồng
         Route::get('contract','ContractManager@getContract')->middleware('checkRoleEm');

@@ -12,7 +12,7 @@ use App;
 use DB;
 use Carbon\Carbon;
 use App\Http\Requests\AddContract;
-
+use FLMess;
 class ContractManager extends Controller
 {
     //Get time now
@@ -67,15 +67,15 @@ class ContractManager extends Controller
         //checking number day ends have exist ?
         // $getcontract=1 have mean day ends = null -> contract hasn't finished
         if($getcontract != "" || $getcontract==1)
-        return back()->withInput()->with('error','Nhân viên vẫn còn hợp đồng');
+        return back()->withInput()->with('error',FLMess::contractEm());
         else{
             $request['date_start'] = date("Y-m-d",strtotime($request->date_now));
             $request['num_work'] = (strtotime($request->date_end) - strtotime($request->date_start))/ (60 * 60 * 24)+1;
             $contract = contract::create($request->all());
             if($contract)
-                return redirect()->intended('admin/contract')->with('success','Thêm hợp đồng thành công');
+                return redirect()->intended('admin/contract')->with('success',FLMess::AddSuccess());
             else
-                return back()->withInput()->with('error','Không thành công');
+                return back()->withInput()->with('error',FLMess::unsuccessful());
         }
     }
     //Get Edit contract
@@ -105,10 +105,10 @@ class ContractManager extends Controller
         $contract['num_work']= (strtotime($request->date_end) - strtotime($request->date_start))/ (60 * 60 * 24)+1;
         if(!empty($contract->getDirty())){
             $contract->update();
-            return redirect()->intended('admin/contract')->with('success','Sửa thông tin thành công');
+            return redirect()->intended('admin/contract')->with('success',FLMess::EditSuccess());
          }
          else
-         return redirect()->intended('admin/contract')->with('error','Thông tin không thay đổi');
+         return redirect()->intended('admin/contract')->with('error',FLMess::unsuccessful());
 
     }
 
@@ -130,10 +130,10 @@ class ContractManager extends Controller
         if($check > 0){
         $contract['num_work'] = $check;
         $contract->update();
-            return redirect()->intended('admin/contract')->with('success','Hợp đồng đã được hủy theo số ngày thành công');
+            return redirect()->intended('admin/contract')->with('success',FLMess::Cancelcontract());
         }
         else
-        return back()->withInput()->with('error','Số ngày kết thúc hợp đồng không được nhỏ hơn ngày bắt đầu');
+        return back()->withInput()->with('error',FLMess::daymis());
 
     }
 }
