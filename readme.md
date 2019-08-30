@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## Quản lý nhân sự
+## Tool quản lý nhân sự
 
 Tool quản lý nhân sự được viết bằng Laravel framework. Gồm các chức năng chính như:
 
@@ -32,5 +32,5 @@ Tool quản lý nhân sự được viết bằng Laravel framework. Gồm các 
 + Hệ thống sẽ tính lương dựa theo setup của lương theo tháng của bảng chấm công.
 + Export ra excel bảng tính lương của nhân viên.
 
-
+-> Ghi chú: nhân viên phải được tạo hợp đồng mới đăng nhập được tài khoản của mình
 
