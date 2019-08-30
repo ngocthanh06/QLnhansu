@@ -30,7 +30,7 @@
                               Vắng không phép:<strong> {{$miss}}</strong><br>
                               Vắng có phép:<strong> {{$per}}</strong><br>
                              Số ngày phép còn lại:<strong> {{12 - $per}}</strong><br>
-                             Số ngày đã làm: <strong>{{$att}}</strong><br>
+                             Tổng số ngày công chưa thanh toán: <strong>{{$att - $pay}}</strong><br>
                           </address>
                           <div >
                                 <a class="btn btn-success" href="{{asset('admin/getAttendance')."/".$acc->id}}" style="margin-left:50px" >Xem chi tiết công</a>
