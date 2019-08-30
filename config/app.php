@@ -134,6 +134,31 @@ return [
     |
     */
 
+
+    //Security hide info from .env
+    'debug_blacklist' => ['_ENV' => [
+        'DB_DATABASE',
+        'DB_PASSWORD','REDIS_PASSWORD',
+        'MAIL_PASSWORD',
+        'PUSHER_APP_KEY',
+        'PUSHER_APP_SECRET',
+        ],
+        '_SERVER' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+        ],
+        '_POST' => [
+            'password',
+        ],
+
+    ],
+
+
+
     'providers' => [
 
         /*
@@ -142,7 +167,8 @@ return [
         //Execl
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
-
+        //Debugbag
+        Barryvdh\Debugbar\ServiceProvider::class,
         //Form
         Collective\Html\HtmlServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
@@ -195,6 +221,7 @@ return [
     */
 
     'aliases' => [
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Form'=> Collective\Html\FormFacade::class,
         'Html'=>Collective\Html\HtmlFacade::class,

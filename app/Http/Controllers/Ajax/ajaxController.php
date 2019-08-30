@@ -462,12 +462,12 @@ class ajaxController extends Controller {
    <td>" . $lt->name_role . " </td>
    <td>" . $lt->BHXH . " </td>
    <td>" . $lt->num_done . "</td>
-   <td>" . number_format($lt->allowance) . "</td>
-   <td>" . number_format($lt->reward) . "</td>
-   <td>" . number_format($lt->position) . "</td>
-   <td>" . number_format($lt->sum_position) . " </td>
-   <td>" . number_format($lt->sum_position * 5 / 100) . "</td>
-   <td>" . number_format($lt->sum_position - $lt->sum_position * 5 / 100) . " </td>
+   <td>" . number_format($lt->allowance) . " VND</td>
+   <td>" . number_format($lt->reward) . " VND</td>
+   <td>" . number_format($lt->position) . " VND</td>
+   <td>" . number_format($lt->sum_position) . " VND</td>
+   <td>" . number_format($lt->sum_position * 5 / 100) . " VND</td>
+   <td>" . number_format($lt->sum_position - $lt->sum_position * 5 / 100) . " VND</td>
    <td>" . $lt->reviced_date . " </td>
 </tr>
 ";

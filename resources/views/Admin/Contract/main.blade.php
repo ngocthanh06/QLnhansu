@@ -45,9 +45,7 @@
                         <td>{{$con->username}}</td>
                         <td>
                             <?php
-                            if(!isset($con->date_end))
-                                echo "Không xác định";
-                            else
+
                                 switch ($con->coefficients)
                                 {
                                     case 1:

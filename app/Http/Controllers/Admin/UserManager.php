@@ -12,6 +12,7 @@ use App\Models\account;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use FLMess;
+use Debugbar;
 
 class UserManager extends Controller
 {
@@ -24,7 +25,6 @@ class UserManager extends Controller
         //Get role
         $data['role'] = $this->getrole();
         $data['all_User'] =DB::table('account')->select('account.address','account.id','name','name_role','sex','info','username','passport','account.num_account','account.BHXH')->leftjoin('role','role.id','account.id_role')->where('id_role','1')->orWhere('id_role','2')->paginate(5);
-
         return view('Admin/Nhanvien/main',$data);
     }
     //Get add employees
