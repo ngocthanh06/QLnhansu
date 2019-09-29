@@ -22,7 +22,7 @@ class SalaryManager extends Controller
     //get role
     protected function getrole()
     {
-        return account::find(Auth::user()->id_role)->getRole;
+        return account::find(Auth::user()->id)->getRole;
     }
     //calendal distance 2 days
     public function cal2Day($date_start,$date_end){

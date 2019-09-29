@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\attendance;
 use App\Models\permission;
+use App\Repositories\TodoInterfaceWork\AttendanceReponsitories1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Models\account;
-use App\Models\contract;
 use App;
 use DB;
 use Carbon\Carbon;
@@ -16,19 +14,33 @@ use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\Exportable;
 use mysql_xdevapi\Session;
 use FLMess;
-
+use App\Repositories\TodoInterfaceWork\ContractReponsitory;
+use App\Repositories\TodoInterfaceWork\AccountReponsitory;
+use App\Repositories\TodoInterfaceWork\AttendanceReponsitory;
+use App\Repositories\TodoInterfaceWork\SupportInterface;
+use App\Repositories\TodoInterfaceWork\JoinModelReponsitory;
+use App\Repositories\TodoInterfaceWork\PermissionReponsitory;
 class AttendanceManager extends Controller
 {
+    private $account, $contract, $attendance, $support, $joinModel, $permission;
+
+    public function __construct(AccountReponsitory $account, ContractReponsitory $contract,
+                                AttendanceReponsitory $attendance, SupportInterface $support,
+                                JoinModelReponsitory $joinModel,PermissionReponsitory $permission )
+    {
+        $this->account = $account;
+        $this->contract = $contract;
+        $this->attendance = $attendance;
+        $this->support = $support;
+        $this->joinModel = $joinModel;
+        $this->permission = $permission;
+    }
+
     //check day off of the contract
     protected function checkPerr($id)
     {
         $data = DB::table('permission')->where('id_contract', $id)->get();
         return $data;
-    }
-    //Get role
-    protected function getrole()
-    {
-        return account::find(Auth::user()->id_role)->getRole;
     }
     //Number workdays folow the contract id
     protected function getAtt($id)
@@ -47,10 +59,10 @@ class AttendanceManager extends Controller
     public function getAttendance($id)
     {
         //Get role
-        $data['role']     = $this->getrole();
-        $info             = contract::find($id);
+        $data['role']     = $this->account->getRole();
+        $info             = $this->contract->getByid($id);
         //check number attendance infomation of contract
-        $data['contract'] = $info->checkAttend()->paginate(10);
+        $data['contract'] = $this->contract->checkAtten($id);
         //Number workdays in month
         $data['work']     = count($this->getMonthWork($id));
         //Update workdays infomation in salary
@@ -68,7 +80,7 @@ class AttendanceManager extends Controller
         //Get time now
         $data['now']        = Carbon::now()->toDateString();
         //Get day off of the contract
-        $data['check']      = $this->checkPerr($id);
+        $data['check']      = $this->permission->getPerWithIdContract();
         //number day off
         $data['countCheck'] = count($this->checkPerr($id));
         //get list the permission
@@ -86,9 +98,9 @@ class AttendanceManager extends Controller
     public function GetAtendance()
     {
         //Get all month of Attendance
-        $attentPay = attendance::groupBy(DB::raw('Month(day)'))->get();
+        $attentPay = $this->attendance->allMonthAttendance();
         //Get role
-        $role = $this->getrole();
+        $role = $this->account->getRole();
         //get list of the employees when join contract and salary
         $list = DB::table('account')->join('contract', 'contract.id_account', 'account.id')->join('salary', 'salary.id_attent', 'contract.id')->join('role', 'role.id', 'account.id_role')->groupBy(DB::raw("Month(reviced_date)"))->groupBy(DB::raw("Year(reviced_date)"))->get();
         $num  = 1;
@@ -99,11 +111,30 @@ class AttendanceManager extends Controller
     //Get Time Attendance
     public function GetTimeAttend(Request $request, $id)
     {
-        $attent             = attendance::find($id);
+        $attent             = $this->attendance->getById($id);
         $attent['checkin']  = Carbon::parse($request->checkin)->ToTimeString();
         $attent['checkout'] = Carbon::parse($request->checkout)->ToTimeString();
         $attent->save();
         return back()->withInput()->with('success', FLMess::successA());
+    }
+
+    //Attendance
+    public function Attendance(){
+        //Get role
+        $data['role']     = $this->account->getRole();
+        //get time now
+        $data['timeNow'] = $this->support->getTimeNow();
+        //Get list permission with id_role = 2 and date_end = null and with attendance isset
+        $data['permission']= $this->account->getListAccWithContractIDrole(2);
+        //Get list permission with id_role = 2 and date_end = null
+        $data['permissTwo'] = $this->account->listAttendanceWithIdContractTwo(2, $data['permission']);
+        //get list attendance
+        $data['listAccPerr'] = '';
+        if(count($data['permission'])==0){
+            $data['listAccPerr'] = $this->account->listAttendanceWithHaveNot(2);
+        }
+//        dd($data['permission']);
+        return view('Admin.Attendance.Attendance', $data);
     }
 
 }

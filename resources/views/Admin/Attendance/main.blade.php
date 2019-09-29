@@ -1,5 +1,6 @@
 @php
     $open = 'contract';
+  $now = \Carbon\Carbon::now();
 @endphp
 @extends('Admin.layout')
 @section('content')
@@ -137,9 +138,7 @@
                                             {
                                                 $item->day = Carbon\Carbon::parse($item->day)->addDay();
                                                 $item->day = Carbon\Carbon::parse($item->day)->format('Y-m-d');
-
                                                 $start1 = Carbon\Carbon::parse($start1)->addDay()->toDateString();
-
                                             }
                                             ?>
                                             <td>
@@ -250,7 +249,7 @@
                                 @if(!isset($end) && $num <=10)
                                     <tr>
                                         <td id='num'>{{$num++}}</td>
-                                        <td>{{$start1}}</td>
+                                        <td>{{$now->toDateString()}}</td>
                                         <td id="day"><a></a></td>
                                         <td id="status"></td>
                                         <td id="att"></td>
@@ -259,7 +258,7 @@
                                         <td></td>
                                         <td>
                                             <div class="checkbox checkbox-success" style="margin-top: 0px;">
-                                                <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{$start1}}" type="checkbox">
+                                                <input value="{{$acc->id}}" name='check' onclick="checkedAtt(this)" id="{{\Carbon\Carbon::now()->toDateString()}}" type="checkbox">
                                                 <label for="checkbox3"> </label>
                                             </div>
                                         </td>

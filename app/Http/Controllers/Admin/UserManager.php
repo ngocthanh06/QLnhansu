@@ -18,7 +18,7 @@ class UserManager extends Controller
 {
     //Get role
     protected function getrole(){
-        return account::find(Auth::user()->id_role)->getRole;
+        return account::find(Auth::user()->id)->getRole;
     }
      //List employees
      public function getUser(){

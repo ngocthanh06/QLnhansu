@@ -23,8 +23,10 @@ class LoginController extends Controller
             ];
 
             if(Auth::attempt($data)){
-                $role = account::find(Auth::user()->id_role)->getRole;
-                    if($role->id == 2)
+//                $role = account::find(Auth::user()->id_role);
+//                dd(Auth::user()->id_role);
+
+                    if(Auth::user()->id_role == 2)
                         return redirect()->intended('admin/home');
                     else
                         return redirect()->intended('admin/user');

@@ -62,11 +62,10 @@ Route::group(['namespace'=>'Admin'],function(){
 
         //Chấm công
         //
-        Route::get('getAttendance/{id}','AttendanceManager@getAttendance')->middleware('checkRoleEm');
         //Xin nghỉ phép
         Route::get('getPermission','PermissionManager@getPermission')->middleware('checkRole');
-        //Get time attendance
-        Route::post('getAttendance/{id}','AttendanceManager@GetTimeAttend');
+        //Get attendance
+        Route::get('Attendance','AttendanceManager@Attendance');
 
         //Lương
         //Get lương
@@ -130,6 +129,18 @@ Route::group(['namespace' =>'Ajax'],function(){
 
         //Get info UserAccept Salary
         Route::get('GetInfoAccept/{id}/{year}','AjaxController@GetInfoAccept');
+
+        //Checkbox attendance for list
+        Route::get('ChecboxAttendance/{id}', 'AjaxController@Attendance');
+
+        //get list attendance for permission and account with date
+        Route::get('getlistAttendaceWithDate/{date}','AjaxController@getlistAttendaceWithDate');
+        //get list account when click event
+        Route::get('checkAddAttendance/{id}/{date}','AjaxController@checkAddAttendance');
+
+        //
+        Route::get('checkPermissIsset/{id}','AjaxController@checkPermissIsset');
+   ;
     });
 
 

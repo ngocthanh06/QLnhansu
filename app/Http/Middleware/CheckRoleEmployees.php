@@ -16,8 +16,8 @@ class CheckRoleEmployees
      */
     public function handle($request, Closure $next)
     {
-        $data = account::find(Auth::user()->id_role)->getRole;
-        if($data->id == 2)
+//        $data = account::find(Auth::user()->id_role)->getRole;
+        if(Auth::user()->id_role == 2)
             return redirect()->intended('admin/home');
         else
             return $next($request);

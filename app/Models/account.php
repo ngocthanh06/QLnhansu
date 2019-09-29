@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\contract;
 use DB;
 
 class account extends Model
@@ -16,6 +17,8 @@ class account extends Model
     public function getRole(){
         return $this->hasOne('App\Models\role','id','id_role');
     }
+
+
 
 
 

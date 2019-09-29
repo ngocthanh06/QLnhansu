@@ -7,17 +7,13 @@ use Closure;
 
 class CheckRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
+
     public function handle($request, Closure $next)
     {
-        $data = account::find(Auth::user()->id_role)->getRole;
-        if($data->id == 1)
+
+//        $data = account::find(Auth::user()->id_role);
+
+        if(Auth::user()->id_role == 1)
             return redirect()->intended('admin/user');
         else
         return $next($request);

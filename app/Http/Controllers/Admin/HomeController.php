@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use App\Models\contract;
+use App\Repositories\TodoInterfaceWork\AccountReponsitory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,15 @@ use App\Models\attendance;
 
 class HomeController extends Controller
 {
+    private $account;
+    public function __construct(AccountReponsitory $account)
+    {
+        $this->account = $account;
+    }
+
     //Get role
     protected function getrole(){
-        return account::find(Auth::user()->id_role)->getRole;
+        return account::find(Auth::user()->id)->getRole;
     }
 
     //Home

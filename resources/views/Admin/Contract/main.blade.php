@@ -61,8 +61,7 @@
                             ?>
                         </td>
                         <td>
-                            <a href="{{asset('admin/salary')."/".$con->id}}" class="btn btn-danger btn-sm">Lương</a>
-                            <a href="{{asset('admin/getAttendance')."/".$con->id}}" class="btn btn-success btn-sm">Công</a>
+                            <a href="{{asset('admin/salary')."/".$con->id}}" class="btn btn-success btn-sm">Lương</a>
                             <a href="{{asset('admin/EditContract')."/".$con->id}}" class="btn btn-primary btn-sm">Sửa</a>
                             <a href="{{asset('admin/DeleteContract')."/".$con->id}}" class="btn btn-danger btn-sm">Hủy</a>
                         </td>

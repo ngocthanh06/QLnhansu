@@ -17,7 +17,7 @@ class PermissionManager extends Controller
 {
     //Get role
     protected function getrole(){
-        return account::find(Auth::user()->id_role)->getRole;
+        return account::find(Auth::user()->id)->getRole;
     }
     //Lấy time now
     protected function gettimenow()
